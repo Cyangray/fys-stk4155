@@ -5,9 +5,9 @@ def create_design_matrix(x, y, n = 5):
 	Function for creating a design X-matrix with rows [1, x, y, x^2, xy, xy^2 , etc.]
 	Input is x and y mesh or raveled mesh, keyword agruments n is the degree of the polynomial you want to fit.
 	"""
-	if len(x.shape) > 1:
-		x = np.ravel(x)
-		y = np.ravel(y)
+	#if len(x.shape) > 1:
+	#	x = np.ravel(x)
+	#	y = np.ravel(y)
 
 	N = len(x)
 	l = int((n+1)*(n+2)/2)		# Number of elements in beta
