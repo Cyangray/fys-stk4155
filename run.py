@@ -19,7 +19,6 @@ x_mesh = np.zeros((no_datasets, n, n))
 y_mesh = np.zeros((no_datasets, n, n))
 z = np.zeros((no_datasets, n, n))
 z_model = np.zeros((no_datasets, n, n))
-
 design_matrix = np.zeros((no_datasets, n*n, 21))
 
 
@@ -38,6 +37,10 @@ for i in range(no_datasets):
 
     if noise:
         z_1d += np.random.randn(n*n) * 0.07
+
+
+
+
 
     design_matrix[i] = create_design_matrix(x_1d,y_1d,n=deg)
     z_tilde = fit_design_matrix_numpy(design_matrix[i], z_1d)
