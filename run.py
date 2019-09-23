@@ -19,11 +19,12 @@ n = 120         # no. of x and y coordinates
 deg = 5         #degree of polynomial
 noise = True    #True/False, add random noise.
 
-no_datasets = 4 # Number of datasets
+no_datasets = 11# Number of datasets
 
 # Generate data from franke function
 inst = data_generate(no_datasets, n, noise)
 inst.generate_franke()
+inst.sort_trainingdata(0.7)
 
 # Fit design matrix
 design_matrix = fit(inst)

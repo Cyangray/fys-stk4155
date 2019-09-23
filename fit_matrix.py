@@ -16,6 +16,7 @@ class fit():
 		y = self.inst.y_1d
 
 		l = int((n+1)*(n+2)/2)		# Number of elements in beta
+		self.l = l
 		X = np.ones((self.inst.no_datasets, N,l))
 
 		for j in range(self.inst.no_datasets):
@@ -30,10 +31,10 @@ class fit():
 		X = self.X
 		z = self.inst.z_1d
 
-		y_tilde = np.zeros((self.inst.no_datasets, ))
+		y_tilde_list = []
 		for j in range(self.inst.no_datasets):
 			beta = np.linalg.inv(X[j].T.dot(X[j])).dot(X[j].T).dot(z[j])
-			y_tilde[j] = X @ beta
-			#print(np.shape(y_tilde))
+			y_tilde_list.append(np.array(X @ beta))
 
-		self.y_tilde = y_tilde
+		self.y_tilde = np.array(y_tilde_list)
+		
