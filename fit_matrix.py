@@ -5,7 +5,7 @@ class fit():
     def __init__(self, inst):
         self.inst = inst
 
-    def create_design_matrix(self, deg=5): #FP: er ikke dette det samme som sklearn.preprocessing.PolynomialFeatures ?
+    def create_design_matrix(self, deg=5): #FP: er ikke dette det samme som sklearn.preprocessing.PolynomialFeatures ? M: Jepp, men dette er vaar egen versjon :)
         """
         Function for creating a design X-matrix with rows [1, x, y, x^2, xy, xy^2 , etc.]
         Input is x and y mesh or raveled mesh, keyword argument deg is the degree of the polynomial you want to fit.
@@ -25,11 +25,10 @@ class fit():
                 for k in range(i+1):
                     X[j, :,q+k] = x[j]**(i-k) + y[j]**k
                     
-        #self.X contains a design matrix for each dataset.
+        #Design matrices for each dataset.
         self.X = X
         
-        #self.X2D are all the design matrices, stacked together, and describe as
-        #such the whole sample
+        #self.X2D are all the design matrices, stacked together.
         self.X2D = np.concatenate(self.X)
 
         # Francesco -> Sjekk over hva som er hva
@@ -37,12 +36,16 @@ class fit():
         X = self.X
         z = self.inst.z_1d
         
-        self.y_tildes = np.zeros((self.inst.no_datasets, len(z[0,:]) ))
-        self.betas = np.zeros((self.inst.no_datasets, len(X[0,0,:]))) #(?)
+        self.y_tilde = np.zeros((self.inst.no_datasets, len(z[0,:]) ))
+        #self.betas = np.zeros((self.inst.no_datasets, len(X[0,0,:]))) #(?)
+        #betas = np.zeros((self.inst.no_datasets, len(X[0,0,:])))
 
         for j in range(self.inst.no_datasets): 
-            self.betas[j] = np.linalg.inv(X[j].T.dot(X[j])).dot(X[j].T).dot(z[j])
-            self.y_tildes[j] = X[j] @ self.betas[j]
+            #self.betas[j] = np.linalg.inv(X[j].T.dot(X[j])).dot(X[j].T).dot(z[j])
+            #self.y_tildes[j] = X[j] @ self.betas[j]
+            beta = np.linalg.inv(X[j].T.dot(X[j])).dot(X[j].T).dot(z[j])
+            self.y_tilde[j] = X[j] @ beta
+        
         """#FP: Forsiktig! Nå dannes beta for hvert dataset, og ikke en generell 
         #beta for alle datasettene til sammen! Som følge, tilhører hver y_tilde
         #kun ett datasett, og ikke hele ensamble. Jeg laga et alternativ under,
@@ -52,15 +55,18 @@ class fit():
             self.betas[j] = np.linalg.inv(X[j].T.dot(X[j])).dot(X[j].T).dot(z[j])
             self.y_tildes[j] = X[j] @ self.betas[j]
             #print(np.shape(y_tilde))"""
-            
-        #FP: alternative for a more general fit of all the no_datasets
-        #X2D = self.X2D
-        #longz = np.concatenate(z)
-        #self.beta = np.linalg.inv(X2D.T.dot(X2D)).dot(X2D.T).dot(longz)
-        #self.y_tilde = X2D @ self.beta
-        #FP: må gjøres: del y_tilde tilbake i datasets, slik at den kan plottes ordentlig mtp meshgrid osv (?)
+    
+    def fit_design_matrix_numpy_all(self)
+        """alternative for a more general fit of all the no_datasets"""
+        X2D = self.X2D
+        z = self.inst.z_1d
+
+        longz = np.concatenate(z)
+        beta = np.linalg.inv(X2D.T.dot(X2D)).dot(X2D.T).dot(longz)
+        self.y_tilde = X2D @ beta
+        #FP: må gjøres: del y_tilde tilbake i datasets, slik at den kan plottes ordentlig mtp meshgrid osv (?) M: Maa sjekke ut
         
-        """def save_statistics(self): #FP: rotete, I know  -Holde statistikk for seg selv?
+        """def save_statistics(self): #FP: rotete, I know  M: Holde statistikk for seg selv?
         y = np.concatenate(self.inst.z_1d)
         #y_tilde = np.concatenate(self.y_tilde)
         y_tilde = self.y_tilde
