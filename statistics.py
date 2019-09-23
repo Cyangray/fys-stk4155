@@ -21,3 +21,11 @@ def calc_R2_score(z, z_tilde):
 
 def calc_R2_score_sklearn(z, z_tilde):
     return r2(z, z_tilde)
+
+
+"""def save_statistics(self): #FP: rotete, I know  M: Holde statistikk for seg selv?
+        y = np.concatenate(self.inst.z_1d)
+        #y_tilde = np.concatenate(self.y_tilde)
+        y_tilde = self.y_tilde
+        self.mse = calc_MSE(y, y_tilde)
+        self.R2score = calc_R2_score(y, y_tilde)"""
