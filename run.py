@@ -1,60 +1,49 @@
 import numpy as np 
 import matplotlib.pyplot as plt 
-
-from functions import franke_function as franke
-from design_matrix import create_design_matrix
-from fit import fit_design_matrix_numpy
-from statistics import calc_MSE, calc_R2_score
-from visualization import plot_3d
-
 import sys
 
-n = 120  # no. of x and y coordinates
-deg = 5 #degree of polynomial
-noise = True #True/False, add random noise.
+#OLD
+#from functions import franke_function as franke
+#from design_matrix import create_design_matrix
+#from fit import fit_design_matrix_numpy
+from statistics import calc_MSE, calc_R2_score
 
-no_datasets = 4
-
-x_mesh = np.zeros((no_datasets, n, n))
-y_mesh = np.zeros((no_datasets, n, n))
-z = np.zeros((no_datasets, n, n))
-z_model = np.zeros((no_datasets, n, n))
-design_matrix = np.zeros((no_datasets, n*n, 21))
-
-
-for i in range(no_datasets):
-    x_array = np.sort(np.random.uniform(0, 1, n)) #np.linspace((0,1,n, n)) #
-    y_array = np.sort(np.random.uniform(0, 1, n)) # np.linspace(0,1,n) #np.sort(np.random.uniform(0, 1, n))
-
-    x_mesh[i], y_mesh[i] = np.meshgrid(x_array,y_array)
-    z[i] = franke(x_mesh[i],y_mesh[i])
-
-    x_1d = np.ravel(x_mesh[i])
-    y_1d = np.ravel(y_mesh[i])
-    z_1d = np.ravel(z[i])
-
-    #print(np.shape(z_1d))
-
-    if noise:
-        z_1d += np.random.randn(n*n) * 0.07
+#NEW
+from data_generation import data_generate
+from fit_matrix import fit
+from visualization import plot_3d
 
 
 
+n = 120         # no. of x and y coordinates
+deg = 5         #degree of polynomial
+noise = True    #True/False, add random noise.
+
+no_datasets = 4 # Number of datasets
+
+# Generate data from franke function
+inst = data_generate(no_datasets, n, noise)
+inst.generate_franke()
+
+# Fit design matrix
+design_matrix = fit(inst)
+design_matrix.create_design_matrix(deg)
+design_matrix.fit_design_matrix_numpy()
+z_model = design_matrix.y_tilde
+
+# Generate analytical solution for plotting purposes
+analytical = data_generate(no_datasets=1, n=n, noise=False)
+analytical.generate_franke()
+
+# Plot solutions and analytical
+plot_3d(inst.x_mesh, inst.y_mesh, z_model, analytical.x_mesh, analytical.y_mesh, analytical.z_mesh, ["surface", "scatter"])
 
 
-    design_matrix[i] = create_design_matrix(x_1d,y_1d,n=deg)
-    z_tilde = fit_design_matrix_numpy(design_matrix[i], z_1d)
-    z_model[i] = z_tilde.reshape(n,n)
-    
 
 
-plot_3d(x_mesh, y_mesh, z, z_model)#, ["surface", "scatter"])
-
-
+"""
+#Statistics - need an update.
 #print(np.shape(z_1d), np.shape(z_tilde))
-
 #print(calc_MSE(z_1d, np.ravel(z_tilde))) #mean sq error
-
 #print(calc_R2_score(z_1d, np.ravel(z_tilde)))
-
-
+"""
