@@ -57,7 +57,7 @@ class data_generate():
         i = 0
         n = self.n
         training_indicies = [] ; test_indicies = []
-        while i < self.no_datasets:#_original:    
+        while i < self.no_datasets:    
             if np.random.rand() > fractions_trainingdata:
                 training_indicies.append(i)
             else:

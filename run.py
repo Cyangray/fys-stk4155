@@ -3,9 +3,6 @@ import matplotlib.pyplot as plt
 import sys
 
 #OLD
-#from functions import franke_function as franke
-#from design_matrix import create_design_matrix
-#from fit import fit_design_matrix_numpy
 from statistics import calc_MSE, calc_R2_score
 
 #NEW
