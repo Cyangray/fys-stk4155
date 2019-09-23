@@ -14,33 +14,34 @@ from visualization import plot_3d
 
 n = 120         # no. of x and y coordinates
 deg = 5         #degree of polynomial
-noise = True    #True/False, add random noise.
-
+noise = 0.2    #if zero, no contribution. Otherwise it will scale the amount of noise.
+training_data_fraction = 0.7
 no_datasets = 11# Number of datasets
 
-# Generate data from franke function
-
-inst.sort_trainingdata(0.7)
+# Generate data
+dataset = data_generate(no_datasets, n, noise)
+dataset.generate_franke()
+dataset.sort_trainingdata(training_data_fraction)
 
 # Fit design matrix
-FittedModel = fit(Dataset)
-liste = [FittedModel]
-FittedModel.create_design_matrix(deg)
-FittedModel.fit_design_matrix_numpy()
-#z_model = FittedModel.y_tilde
+fitted_model = fit(dataset)
+liste = [fitted_model]
+fitted_model.create_design_matrix(deg)
+fitted_model.fit_design_matrix_numpy()
+#z_model = fitted_model.y_tilde
 
 # Generate analytical solution for plotting purposes
 analytical = data_generate(no_datasets=1, n=n, noise=False)
 analytical.generate_franke()
 
 # Plot solutions and analytical
-plot_3d(Dataset.x_mesh, Dataset.y_mesh, z_model, analytical.x_mesh, analytical.y_mesh, analytical.z_mesh, ["surface", "scatter"])
+#plot_3d(Dataset.x_mesh, dataset.y_mesh, z_model, analytical.x_mesh, analytical.y_mesh, analytical.z_mesh, ["surface", "scatter"])
 
 # Generate statistics on the fit
 
-#FittedModel.save_statistics()
-#print(FittedModel.mse)
-#print(FittedModel.R2score)
+#fitted_model.save_statistics()
+#print(fitted_model.mse)
+#print(fitted_model.R2score)
 
 
 
