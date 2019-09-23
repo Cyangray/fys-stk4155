@@ -7,10 +7,8 @@ from functions import franke_function
 class data_generate():
     def __init__(self, no_datasets, n, noise ):
         self.no_datasets = no_datasets
-        #self.no_datasets_original = no_datasets
         self.n = n
         self.noise = noise
-        #self.dumm = 3
         self.resort = int(0)
         
 
@@ -22,7 +20,6 @@ class data_generate():
 
         self.x = np.zeros((no_datasets, n))
         self.y = np.zeros((no_datasets, n))
-        #z = np.zeros((no_datasets, n))
         
         self.x_mesh = np.zeros((no_datasets, n, n))
         self.y_mesh = np.zeros((no_datasets, n, n))
@@ -52,6 +49,7 @@ class data_generate():
         or a list of fraction for training data and test data. The last fraction will be extra data. 
         Manual/self written version."""
 
+        # Since training data are renamed further down, make a copy for it to be able to resort later. 
         if self.resort < 1:
             np.savez("backup_data", self.no_datasets, self.x, self.y, self.x_mesh, self.y_mesh, self.z_mesh, self.x_1d, self.y_1d, self.z_1d)
         else: # self.resort > 0:
@@ -71,71 +69,12 @@ class data_generate():
 
     def load_terrain_data(self):
         self.data()
-        #return 1. 
-
-
-        """def generate_array_training(self, i):
-        n = self.n
-        self.training_x = np.zeros((len(i), n))
-        self.training_y = np.zeros((len(i), n))
-        #z = np.zeros((no_datasets, n))
-        
-        self.training_x_mesh = np.zeros((len(i), n, n))
-        self.training_y_mesh = np.zeros((len(i), n, n))
-        self.training_z_mesh = np.zeros((len(i), n, n))
-
-        self.training_x_1d = np.zeros((len(i), n*n))
-        self.training_y_1d = np.zeros((len(i), n*n))
-        self.training_z_1d = np.zeros((len(i), n*n))"""
+        return 1. 
 
     def fill_array_test_training(self, test, training):
 
-        # Since training data are renamed further down, make a copy for it to be able to resort later. 
-
-
-        """for j in range(len(i)):
-            self.training_x[j] = self.x[i[j]]
-            self.training_y[j] = self.y[i[j]]
-            #z = np.zeros((no_datasets, n))
-            
-            self.training_x_mesh[j] = self.x_mesh[i[j]]
-            self.training_y_mesh[j] = self.y_mesh[i[j]]
-            self.training_z_mesh[j] = self.z_mesh[i[j]]
-
-            self.training_x_1d[j] = self.x_1d[i[j]]
-            self.training_y_1d[j] = self.y_1d[i[j]]
-            self.training_z_1d[j] = self.z_1d[i[j]]"""
-
-
-        """def generate_array_test(self, i):
-        self.test_x = np.zeros((len(i), n))
-        self.test_y = np.zeros((len(i), n))
-        #z = np.zeros((no_datasets, n))
-        
-        self.test_x_mesh = np.zeros((len(i), n, n))
-        self.test_y_mesh = np.zeros((len(i), n, n))
-        self.test_z_mesh = np.zeros((len(i), n, n))
-
-        self.test_x_1d = np.zeros((len(i), n*n))
-        self.test_y_1d = np.zeros((len(i), n*n))
-        self.test_z_1d = np.zeros((len(i), n*n))"""
-    
-        #def fill_array_test(self,i):
-        """for j in range(len(i)):
-            self.test_x[j] = self.x[i[j]]
-            self.test_y[j] = self.y[i[j]]
-            #z = np.zeros((no_datasets, n))
-            
-            self.test_x_mesh[j] = self.x_mesh[i[j]]
-            self.test_y_mesh[j] = self.y_mesh[i[j]]
-            self.test_z_mesh[j] = self.z_mesh[i[j]]
-
-            self.test_x_1d[j] = self.x_1d[i[j]]
-            self.test_y_1d[j] = self.y_1d[i[j]]
-            self.test_z_1d[j] = self.z_1d[i[j]]"""
         self.test_x = self.x[testing]
         self.test_y = self.y[i]
-        #z = np.zeros((no_datasets, n))
             
         self.test_x_mesh = self.x_mesh[testing]
         self.test_y_mesh = self.y_mesh[testing]
@@ -145,23 +84,10 @@ class data_generate():
         self.test_y_1d = self.y_1d[testing]
         self.test_z_1d = self.z_1d[testing]
 
-        """
-        self.training_x = self.x[i[j]]
-        self.training_y = self.y[i[j]]
-        #z = np.zeros((no_datasets, n))
-            
-        self.training_x_mesh = self.x_mesh[training]
-        self.training_y_mesh = self.y_mesh[training]
-        self.training_z_mesh = self.z_mesh[training]
-
-        self.training_x_1d = self.x_1d[training]
-        self.training_y_1d = self.y_1d[training]
-        self.training_z_1d = self.z_1d[training]"""
 
         #Rename training data to "normal" data to avoid confusion w/ other functions.
         self.x = self.x[training]
         self.y = self.y[training]
-        #z = np.zeros((no_datases, n))
             
         self.x_mesh = self.x_mesh[training]
         self.y_mesh = self.y_mesh[training]
