@@ -22,21 +22,28 @@ noise = True    #True/False, add random noise.
 no_datasets = 4 # Number of datasets
 
 # Generate data from franke function
-inst = data_generate(no_datasets, n, noise)
-inst.generate_franke()
+Dataset = data_generate(no_datasets, n, noise)
+Dataset.generate_franke()
 
 # Fit design matrix
-design_matrix = fit(inst)
-design_matrix.create_design_matrix(deg)
-design_matrix.fit_design_matrix_numpy()
-z_model = design_matrix.y_tilde
+FittedModel = fit(Dataset)
+liste = [FittedModel]
+FittedModel.create_design_matrix(deg)
+FittedModel.fit_design_matrix_numpy()
+z_model = FittedModel.y_tilde
 
 # Generate analytical solution for plotting purposes
 analytical = data_generate(no_datasets=1, n=n, noise=False)
 analytical.generate_franke()
 
 # Plot solutions and analytical
-plot_3d(inst.x_mesh, inst.y_mesh, z_model, analytical.x_mesh, analytical.y_mesh, analytical.z_mesh, ["surface", "scatter"])
+plot_3d(Dataset.x_mesh, Dataset.y_mesh, z_model, analytical.x_mesh, analytical.y_mesh, analytical.z_mesh, ["surface", "scatter"])
+
+# Generate statistics on the fit
+
+FittedModel.save_statistics()
+print(FittedModel.mse)
+print(FittedModel.R2score)
 
 
 

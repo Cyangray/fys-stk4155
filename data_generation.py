@@ -16,7 +16,7 @@ class data_generate():
         """ Generate franke-data """
         no_datasets = self.no_datasets
         n = self.n
-        noise = self.noise
+        noise = self.noise #Are we using it?
 
         self.x = np.zeros((no_datasets, n))
         self.y = np.zeros((no_datasets, n))
@@ -40,12 +40,14 @@ class data_generate():
             self.x_1d[i] = np.ravel(self.x_mesh[i])
             self.y_1d[i] = np.ravel(self.y_mesh[i])
             self.z_1d[i] = np.ravel(self.z_mesh[i])
-
+            
+            #Hva gjør 0.5 og 0.07 nøyaktig? Hvis disse parametrene er vilkårlige, 
+            #burde vi kanskje ha dette i en metode, som tar parametrene som input? 
+            #Noe som kommer til å se ut som inst.Add_noise(0.5, 0.07)
             if self.noise:
-                self.z_1d[i] += (np.random.randn(n*n)-0.5) * 0.07
+                self.z_1d[i] += (np.random.randn(n*n)-0.5) * 0.07 
 
-        
 
-    def load_terrain_data():
+    def load_terrain_data(self):
         self.data()
         return 1. 
