@@ -3,9 +3,6 @@ import matplotlib.pyplot as plt
 import sys
 
 #OLD
-#from functions import franke_function as franke
-#from design_matrix import create_design_matrix
-#from fit import fit_design_matrix_numpy
 from statistics import calc_MSE, calc_R2_score
 
 #NEW
@@ -19,18 +16,18 @@ n = 120         # no. of x and y coordinates
 deg = 5         #degree of polynomial
 noise = True    #True/False, add random noise.
 
-no_datasets = 4 # Number of datasets
+no_datasets = 11# Number of datasets
 
 # Generate data from franke function
-Dataset = data_generate(no_datasets, n, noise)
-Dataset.generate_franke()
+
+inst.sort_trainingdata(0.7)
 
 # Fit design matrix
 FittedModel = fit(Dataset)
 liste = [FittedModel]
 FittedModel.create_design_matrix(deg)
 FittedModel.fit_design_matrix_numpy()
-z_model = FittedModel.y_tilde
+#z_model = FittedModel.y_tilde
 
 # Generate analytical solution for plotting purposes
 analytical = data_generate(no_datasets=1, n=n, noise=False)
@@ -41,9 +38,9 @@ plot_3d(Dataset.x_mesh, Dataset.y_mesh, z_model, analytical.x_mesh, analytical.y
 
 # Generate statistics on the fit
 
-FittedModel.save_statistics()
-print(FittedModel.mse)
-print(FittedModel.R2score)
+#FittedModel.save_statistics()
+#print(FittedModel.mse)
+#print(FittedModel.R2score)
 
 
 

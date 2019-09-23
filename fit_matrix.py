@@ -32,8 +32,8 @@ class fit():
         #such the whole sample
         self.X2D = np.concatenate(self.X)
 
-
-    def fit_design_matrix_numpy(self):
+        # Francesco -> Sjekk over hva som er hva
+    def fit_design_matrix_numpy_Francesco(self):
         X = self.X
         z = self.inst.z_1d
         
@@ -62,3 +62,16 @@ class fit():
         y_tilde = self.y_tilde
         self.mse = calc_MSE(y, y_tilde)
         self.R2score = calc_R2_score(y, y_tilde)
+        # Francesco
+        
+	def fit_design_matrix_numpy(self):
+		X = self.X
+		z = self.inst.z_1d
+
+		y_tilde_list = []
+		for j in range(self.inst.no_datasets):
+			beta = np.linalg.inv(X[j].T.dot(X[j])).dot(X[j].T).dot(z[j])
+			y_tilde_list.append(np.array(X @ beta))
+
+		self.y_tilde = np.array(y_tilde_list)
+
