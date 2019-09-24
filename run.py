@@ -10,7 +10,7 @@ import statistical_functions as statistics
 
 
 n = 150                 # no. of x and y coordinates
-deg = 8                 #degree of polynomial
+deg = 5                 #degree of polynomial
 noise = 0.05            #if zero, no contribution. Otherwise scaling the noise.
 
 #How many sets do you want to share the dataset in? In a train-test situation, 
@@ -22,15 +22,20 @@ k = 5
 dataset = data_generate(n, noise)
 liste1 = [dataset]
 dataset.generate_franke()
-#dataset.sort_in_k_batches(k)
-#dataset.sort_training_test(0)
-#dataset.fill_array_test_training()
+dataset.sort_in_k_batches(k)
+
 
 # Fit design matrix
-fitted_model = fit(dataset)
+fitted_model = fit(dataset,deg)
 liste2 = [fitted_model]
-fitted_model.create_design_matrix(deg)
-fitted_model.fit_design_matrix_numpy()
+
+#Ordinary fitting (exercise 1)
+fitted_model.X = fitted_model.create_design_matrix()
+fitted_model.y_tilde, fitted_model.beta = fitted_model.fit_design_matrix_numpy()
+
+#K-fold cross-validation (exercise 2)
+dataset.sort_in_k_batches(k)
+best_predicting_beta, test_index = fitted_model.kfold_cross_validation()
 
 
 # Generate analytical solution for plotting purposes
@@ -38,7 +43,10 @@ analytical = data_generate(n, noise=False)
 analytical.generate_franke()
 
 # Plot solutions and analytical
-z_model = fitted_model.y_tilde
+#z_model = fitted_model.y_tilde
+z_model = fitted_model.X @ best_predicting_beta
+
+
 plot_3d(dataset.x_1d, dataset.y_1d, z_model, analytical.x_mesh, analytical.y_mesh, analytical.z_mesh, ["surface", "scatter"])
 
 mse, calc_r2 = statistics.calc_statistics(dataset.z_1d, fitted_model.y_tilde)

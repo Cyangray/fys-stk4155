@@ -47,10 +47,10 @@ class data_generate():
         validation. Recommended numbers are k = 3, 4 or 5. "random" sorts the
         dataset randomly. if random==False, it sorts them statistically"""
         # Since training data are renamed further down, make a copy for it to be able to resort later. 
-        if self.resort < 1:
-            np.savez("backup_data", self.n, self.N, self.x, self.y, self.x_mesh, self.y_mesh, self.z_mesh, self.x_1d, self.y_1d, self.z_1d)
-        else: # self.resort > 0:
-            np.load("backup_data")
+        #if self.resort < 1:
+        #    np.savez("backup_data", self.n, self.N, self.x, self.y, self.x_mesh, self.y_mesh, self.z_mesh, self.x_1d, self.y_1d, self.z_1d)
+        #else: # self.resort > 0:
+        #    np.load("backup_data")
             
         self.k = k
         idx = 0
@@ -165,10 +165,10 @@ class data_generate():
         self.train_z_1d = np.take(self.z_1d,training)
         
         #Rename training data to "normal" data to avoid confusion w/ other functions.
-        self.x_1d = self.train_x_1d
-        self.y_1d = self.train_y_1d
-        self.z_1d = self.train_z_1d
+        #self.x_1d = self.train_x_1d
+        #self.y_1d = self.train_y_1d
+        #self.z_1d = self.train_z_1d
         
         # Redefine lengths for training and testing.
-        self.N = len(training)
+        self.N_training = len(training)
         self.N_testing = len(testing)
