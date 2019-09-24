@@ -164,9 +164,9 @@ class data_generate():
             self.test_x_1d = np.zeros((no_datasets, ntest))
             self.test_y_1d = np.zeros((no_datasets, ntest))
             self.test_z_1d = np.zeros((no_datasets, ntest))
-            self.x_1d = np.zeros((no_datasets, ntraining))
-            self.y_1d = np.zeros((no_datasets, ntraining))
-            self.z_1d = np.zeros((no_datasets, ntraining))
+            self.train_x_1d = np.zeros((no_datasets, ntraining))
+            self.train_y_1d = np.zeros((no_datasets, ntraining))
+            self.train_z_1d = np.zeros((no_datasets, ntraining))
             for j in range(self.no_datasets):
                 self.test_x_1d[j] = np.take(self.x_1d[j,:],testing)
                 self.test_y_1d[j] = np.take(self.y_1d[j,:],testing)
@@ -181,11 +181,14 @@ class data_generate():
             #self.y_mesh = self.y_mesh[0,training]
             #self.z_mesh = self.z_mesh[0,training]
     
-                self.x_1d[j] = np.take(self.x_1d[j,:],training)
-                self.y_1d[j] = np.take(self.y_1d[j,:],training)
-                self.z_1d[j] = np.take(self.z_1d[j,:],training)
+                self.train_x_1d[j] = np.take(self.x_1d[j,:],training)
+                self.train_y_1d[j] = np.take(self.y_1d[j,:],training)
+                self.train_z_1d[j] = np.take(self.z_1d[j,:],training)
     
             # Redefine lengths for training and testing.
+            self.x_1d = self.train_x_1d
+            self.y_1d = self.train_y_1d
+            self.z_1d = self.train_z_1d
             self.N = len(training)
             self.N_testing = len(testing)
             

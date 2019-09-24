@@ -1,5 +1,6 @@
 import numpy as np
-from statistics import calc_MSE, calc_R2_score, calc_R2_score_sklearn
+#from statistics import calc_MSE, calc_R2_score, calc_R2_score_sklearn
+import statistical_functions
 
 class fit():
     def __init__(self, inst):
@@ -34,7 +35,7 @@ class fit():
     def fit_design_matrix_numpy(self):
         Xs = self.Xs
         z = self.inst.z_1d
-        self.y_tilde = np.zeros((self.inst.no_datasets, len(z) ))
+        self.y_tilde = np.zeros((self.inst.no_datasets, len(z[0,:]) ))
         self.betas = np.zeros((self.inst.no_datasets, len(Xs[0,0,:]) ))
 
         for j in range(self.inst.no_datasets): 

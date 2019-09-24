@@ -6,7 +6,7 @@ import sys
 from data_generation import data_generate
 from fit_matrix import fit
 from visualization import plot_3d
-import statistics
+import statistical_functions as statistics
 
 
 n = 120                 # no. of x and y coordinates
