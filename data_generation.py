@@ -43,10 +43,9 @@ class data_generate():
                 self.z_1d[i] += (np.random.randn(n*n)-0.5) * self.noise
 
         
-    def sort_trainingdata(self, fractions_trainingdata):
-        """Approx fraction of data to be used as training data (number from 0 to 1)
-        or a list of fraction for training data and test data. The last fraction will be extra data. 
-        Manual/self written version."""
+    def sort_trainingdata_random(self, fractions_trainingdata):
+        """ RANDOM! Does not give you the fraction, but the fraction is the probability of being training data.
+        Generates lists for sorting training data and test data."""
 
         # Since training data are renamed further down, make a copy for it to be able to resort later. 
         if self.resort < 1:
@@ -55,20 +54,47 @@ class data_generate():
             np.load("backup_data")
         i = 0
         n = self.n
-        training_indicies = [] ; test_indicies = []
+        self.training_indicies = [] ; self.test_indicies = []
         while i < self.no_datasets:    
             if np.random.rand() > fractions_trainingdata:
-                training_indicies.append(i)
+                self.training_indicies.append(i)
             else:
-                test_indicies.append(i)
+                self.test_indicies.append(i)
             i += 1
         self.resort += 1
+
+
+    def sort_trainingdata_statistical(self, fractions_trainingdata):
+        """ STATISTICAL! Does give you the fraction as close as possible.
+        Generates lists for sorting training data and test data."""
+
+        # Since training data are renamed further down, make a copy for it to be able to resort later. 
+        if self.resort < 1:
+            np.savez("backup_data", self.no_datasets, self.x, self.y, self.x_mesh, self.y_mesh, self.z_mesh, self.x_1d, self.y_1d, self.z_1d)
+        else: # self.resort > 0:
+            np.load("backup_data")
+
+        # M: There is probably a more elegant way of splitting values into
+        # two lists with a certain fraction, but this should work. :)
+        no_training_set = int(self.no_datasets*fractions_trainingdata)
+        no_test_set = self.no_datasets - no_training_set
+
+        # Lists int values, shuffles randomly and splits into two pieces.
+        split = np.arange(self.no_datasets)
+        np.random.shuffle(split)
+        
+        self.training_indicies = list(split[:no_training_set])
+        self.test_indicies = list(split[no_training_set:])
+
+        self.resort += 1
+        
 
     def load_terrain_data(self):
         self.data()
         return 1. 
 
-    def fill_array_test_training(self, test, training):
+    def fill_array_test_training(self):
+        testing = self.test_indicies ; training = self.training_indicies
 
         self.test_x = self.x[testing]
         self.test_y = self.y[testing]

@@ -45,7 +45,7 @@ class fit():
             self.y_tilde[j] = X[j] @ beta
         
     
-    def fit_design_matrix_numpy_all(self)
+    def fit_design_matrix_numpy_all(self):
         """alternative for a more general fit of all the no_datasets"""
         X2D = self.X2D
         z = self.inst.z_1d

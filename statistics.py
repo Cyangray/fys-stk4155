@@ -23,9 +23,23 @@ def calc_R2_score_sklearn(z, z_tilde):
     return r2(z, z_tilde)
 
 
-"""def save_statistics(self): #FP: rotete, I know  M: Holde statistikk for seg selv?
+"""def save_statistics(self): #M:Add total avg to statistics file properly.
         y = np.concatenate(self.inst.z_1d)
         #y_tilde = np.concatenate(self.y_tilde)
         y_tilde = self.y_tilde
         self.mse = calc_MSE(y, y_tilde)
         self.R2score = calc_R2_score(y, y_tilde)"""
+
+
+def calc_statistics(no_datasets, z, z_tilde):
+    n = no_datasets
+    mse = np.zeros(n)
+    calc_r2 = np.zeros(n)
+
+    for i in range(n):
+        mse[i] = calc_MSE(z[i], z_tilde[i])
+        calc_r2[i] = calc_R2_score(z[i], z_tilde[i])
+    return mse, calc_r2
+
+
+

@@ -11,8 +11,7 @@ def plot_3d(x, y, z, an_x, an_y, an_z, plot_type):
 
     #surf = ax.plot_surface(x_array, y_array, z_tilde, cmap=cm.coolwarm, linewidth=0, antialiased=False)
 
-    print("analytical", np.shape(an_x), np.shape(an_y), np.shape(an_z))
-    print("num.", np.shape(x), np.shape(y), np.shape(z))
+    # Surface of analytical solution.
     surf = ax.plot_surface(an_x[0], an_y[0], an_z[0], cmap=cm.coolwarm, linewidth=0, antialiased=False)
 
 
@@ -25,8 +24,6 @@ def plot_3d(x, y, z, an_x, an_y, an_z, plot_type):
         else:
             AssertionError("error")"""
     
-    
-    #print(np.shape(x_array), np.shape(y_array), np.shape(z_tilde))
 
 
     # Customize the z axis.
@@ -40,3 +37,4 @@ def plot_3d(x, y, z, an_x, an_y, an_z, plot_type):
     #fig.colorbar(surf, shrink=0.5, aspect=5)
 
     plt.show()
+
