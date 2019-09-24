@@ -16,18 +16,21 @@ noise = 0.05            #if zero, no contribution. Otherwise scaling the noise.
 #If you want to sort, approx fraction of data to be used for training. The rest is for testing. OBS! Statistical vs. random!
 training_data_fraction = 0.9
 
-no_datasets = 10     # Number of datasets
+no_datasets = 3     # Number of datasets
 
 # Generate data
 dataset = data_generate(no_datasets, n, noise)
+liste1 = [dataset]
 dataset.generate_franke()
 #dataset.sort_trainingdata_random(training_data_fraction)
-dataset.sort_trainingdata_statistical(training_data_fraction)
+#dataset.sort_trainingdata_statistical(training_data_fraction)
+dataset.sort_in_k_batches(5)
+dataset.sort_training_test(0)
 dataset.fill_array_test_training()
 
 # Fit design matrix
 fitted_model = fit(dataset)
-liste = [fitted_model]
+liste2 = [fitted_model]
 fitted_model.create_design_matrix(deg)
 fitted_model.fit_design_matrix_numpy()
 
