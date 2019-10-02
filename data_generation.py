@@ -16,16 +16,16 @@ class data_generate():
         n = self.n
         self.N = n*n #Number of datapoints (in a square meshgrid)
 
-        self.x = np.zeros((n,))
-        self.y = np.zeros((n,))
+        self.x = np.zeros((n))
+        self.y = np.zeros((n))
         
         self.x_mesh = np.zeros((n, n))
         self.y_mesh = np.zeros((n, n))
         self.z_mesh = np.zeros((n, n))
 
-        self.x_1d = np.zeros((n*n,))
-        self.y_1d = np.zeros((n*n,))
-        self.z_1d = np.zeros((n*n,))
+        self.x_1d = np.zeros((n*n))
+        self.y_1d = np.zeros((n*n))
+        self.z_1d = np.zeros((n*n))
 
 
         self.x = np.sort(np.random.uniform(0, 1, n))
@@ -92,6 +92,48 @@ class data_generate():
                 self.training_indices += self.k_idxs[idx]
         
     
+
+        
+
+    def load_terrain_data(self):
+        self.data()
+        return 1. 
+
+    def fill_array_test_training(self):
+        testing = self.test_indices ; training = self.training_indices
+        
+        #ntest = len(testing)
+        #ntraining = len(training)
+
+        #self.test_x_1d = np.zeros((ntest,))
+        #self.test_y_1d = np.zeros((ntest,))
+        ##self.test_z_1d = np.zeros((ntest,))
+        #self.train_x_1d = np.zeros((ntraining,))
+        #self.train_y_1d = np.zeros((ntraining,))
+        #self.train_z_1d = np.zeros((ntraining,))
+
+        self.test_x_1d = np.take(self.x_1d, testing)
+        self.test_y_1d = np.take(self.y_1d, testing)
+        self.test_z_1d = np.take(self.z_1d, testing)
+        
+        self.train_x_1d = np.take(self.x_1d,training)
+        self.train_y_1d = np.take(self.y_1d,training)
+        self.train_z_1d = np.take(self.z_1d,training)
+        
+        #Rename training data to "normal" data to avoid confusion w/ other functions.
+        #self.x_1d = self.train_x_1d
+        #self.y_1d = self.train_y_1d
+        #self.z_1d = self.train_z_1d
+        
+        # Redefine lengths for training and testing.
+        self.N_training = len(training)
+        self.N_testing = len(testing)
+
+
+
+
+        
+
     def sort_trainingdata_random(self, fractions_trainingdata): #OBSOLETE
         """ RANDOM! Does not give you the fraction, but the fraction is the probability of being training data.
         Generates lists for sorting training data and test data."""
@@ -138,37 +180,3 @@ class data_generate():
         self.test_indices = list(split[no_training_set:])
 
         self.resort += 1
-        
-
-    def load_terrain_data(self):
-        self.data()
-        return 1. 
-
-    def fill_array_test_training(self):
-        testing = self.test_indices ; training = self.training_indices
-        
-        ntest = len(testing)
-        ntraining = len(training)
-
-        self.test_x_1d = np.zeros((ntest,))
-        self.test_y_1d = np.zeros((ntest,))
-        self.test_z_1d = np.zeros((ntest,))
-        self.train_x_1d = np.zeros((ntraining,))
-        self.train_y_1d = np.zeros((ntraining,))
-        self.train_z_1d = np.zeros((ntraining,))
-
-        self.test_x_1d = np.take(self.x_1d, testing)
-        self.test_y_1d = np.take(self.y_1d, testing)
-        self.test_z_1d = np.take(self.z_1d, testing)
-        self.train_x_1d = np.take(self.x_1d,training)
-        self.train_y_1d = np.take(self.y_1d,training)
-        self.train_z_1d = np.take(self.z_1d,training)
-        
-        #Rename training data to "normal" data to avoid confusion w/ other functions.
-        #self.x_1d = self.train_x_1d
-        #self.y_1d = self.train_y_1d
-        #self.z_1d = self.train_z_1d
-        
-        # Redefine lengths for training and testing.
-        self.N_training = len(training)
-        self.N_testing = len(testing)

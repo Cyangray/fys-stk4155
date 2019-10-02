@@ -37,5 +37,10 @@ def calc_statistics(z, z_tilde):
     calc_r2 = calc_R2_score(z, z_tilde)
     return mse, calc_r2
 
+# From fit matrix.
+    #def evaluate_test(self, z_predicted, z_observed):
+    #    """Method that tests how good the model fits the test set"""
+    #    mse, calc_r2 = statistics.calc_statistics(z_predicted, z_observed)
+    #    return mse, calc_r2
 
 
