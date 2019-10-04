@@ -2,6 +2,7 @@ import numpy as np
 
 import statistical_functions as statistics
 from fit_matrix import fit
+from functions import franke_function
 
 class sampling():
     def __init__(self, inst):
@@ -9,22 +10,23 @@ class sampling():
 
     def kfold_cross_validation(self, k, method):
         """Method that implements the k-fold cross-validation algorithm. It takes
-        as input the method we want to use. if "none" an ordinary OLS will be evaulated.
-        if "ridge" then the ridge method will be used, and respectively the same for "LASSO"."""
+        as input the method we want to use. if "least squares" an ordinary OLS will be evaulated.
+        if "ridge" then the ridge method will be used, and respectively the same for "lasso"."""
 
         inst = self.inst
+        lowest_mse = 1e2
 
-        self.mse = np.ones(k)
-        self.calc_r2 = np.ones(k)
+        self.mse = []
+        self.R2 = []
         design_matrix = fit(inst)
         
         for i in range(self.inst.k):
             #pick the i-th set as test
-            inst.sort_training_test(i)
+            inst.sort_training_test_kfold(i)
             inst.fill_array_test_training()
 
             design_matrix.create_design_matrix()
-            if method == None:
+            if method == "least squares":
                 z_pred, beta_pred = design_matrix.fit_design_matrix_numpy()
             elif method == "ridge":
                 z_pred, beta_pred = design_matrix.fit_design_matrix_ridge()
@@ -37,14 +39,16 @@ class sampling():
             #Find out which values get predicted by the training set
             X_test = design_matrix.create_design_matrix(x=inst.test_x_1d, y=inst.test_y_1d, z=inst.test_z_1d, N=inst.N_testing)
             z_test = design_matrix.test_design_matrix(beta_pred)
-                
-            #evaluate the training set
-            #self.mse, self.calc_r2 = statistics.calc_statistics(z_pred, z_test)
-            #print(self.mse, self.calc_r2)
-            #if mse < lowest_mse:
-            #    lowest_mse = mse
-            #    best_predicting_beta = beta_train
-            #    test_index = i
-             
 
+            # Generate analytical solution for statistics
+            z_analytical = franke_function(inst.test_x_1d, inst.test_y_1d)
 
+            # Statistically evaluate the training set with test and analytical solution.
+            mse, calc_r2 = statistics.calc_statistics(z_analytical, z_test)
+            self.mse.append(mse)
+            self.R2.append(calc_r2)
+            # If needed/wanted?: 
+            if abs(mse) < lowest_mse:
+                lowest_mse = mse
+                self.best_predicting_beta = beta_pred
+            

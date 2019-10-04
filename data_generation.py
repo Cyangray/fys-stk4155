@@ -40,7 +40,12 @@ class data_generate():
         if self.noise != 0: #0.5 for centering from [0,1] to [-0.5,0.5]
             self.z_1d += (np.random.randn(n*n)-0.5) * self.noise
 
+
+    def load_terrain_data(self):
+        self.data()
+        return 1. 
     
+
     def sort_in_k_batches(self, k, random=True):
         """ Sorts the data into k batches, i.e. prepares the data for k-fold cross
         validation. Recommended numbers are k = 3, 4 or 5. "random" sorts the
@@ -73,37 +78,59 @@ class data_generate():
                 self.k_idxs[i].append( split[limits[i] : limits[i+1]] )
                 
     
-    def sort_training_test(self, i):
+    def sort_training_test_kfold(self, i):
         """After soring the dataset into k batches, pick one of them and this one 
         will play the part of the test set, while the rest will end up being 
         the training set. the input i should be an integer between 0 and k-1, and it
-        picks the test set."""
+        picks the test set. """
         self.test_indices = self.k_idxs[i]
         self.training_indices = []
         for idx in range(self.k):
             if idx != i:
                 self.training_indices += self.k_idxs[idx]
 
-    def load_terrain_data(self):
-        self.data()
-        return 1. 
+    def sort_training_test_random(self, fractions_trainingdata):
+        """ RANDOM! Does not give you the fraction, but the fraction 
+        is the probability of being training data. Generates lists for 
+        sorting training data and test data."""
+
+        # Since training data are renamed other places, make a copy for it to be able to resort later. 
+        self.reload_data()
+            
+        i = 0
+        n = self.n
+        self.training_indices = [] ; self.test_indices = []
+
+        while i < self.no_datasets:    
+            if np.random.rand() > fractions_trainingdata:
+                self.training_indices.append(i)
+            else:
+                self.test_indices.append(i)
+            i += 1
+
+
+    def sort_training_test_statistical(self, fractions_trainingdata):
+        """ STATISTICAL! Does give you the fraction as close as possible.
+        Generates lists for sorting training data and test data."""
+
+        # Since training data are renamed other places, make a copy for it to be able to resort later. 
+        self.reload_data()
+
+        no_training_set = int(self.no_datasets*fractions_trainingdata)
+        no_test_set = self.no_datasets - no_training_set
+
+        # Lists int values, shuffles randomly and splits into two pieces.
+        split = np.arange(self.N)
+        np.random.shuffle(split)
+
+        self.training_indices = list(split[:no_training_set])
+        self.test_indices = list(split[no_training_set:])
+
 
     def fill_array_test_training(self):
         testing = self.test_indices ; training = self.training_indices
 
-        if self.resort < 1:
-            np.savez("backup_data", N=self.N, x=self.x_1d, y=self.y_1d, z=self.z_1d) # self.x, self.y, self.x_mesh, self.y_mesh, self.z_mesh, self.x_1d, self.y_1d, self.z_1d)
-        else: # self.resort > 0:
-            data = np.load("backup_data.npz")
-            self.N = data["N"]
-            self.x_1d = data["x"]
-            self.y_1d = data["y"]
-            self.z_1d = data["z"]
-
-        print(self.resort)
-        print(len(self.x_1d))
-        self.resort += 1
-
+        self.reload_data()
 
         self.test_x_1d = np.take(self.x_1d, testing)
         self.test_y_1d = np.take(self.y_1d, testing)
@@ -116,4 +143,18 @@ class data_generate():
         # Redefine lengths for training and testing.
         self.N = len(training)
         self.N_testing = len(testing)
+
+    def reload_data(self):
+        if self.resort < 1:
+            np.savez("backup_data", N=self.N, x=self.x_1d, y=self.y_1d, z=self.z_1d)
+        else: # self.resort > 0:
+            data = np.load("backup_data.npz")
+            self.N = data["N"]
+            self.x_1d = data["x"]
+            self.y_1d = data["y"]
+            self.z_1d = data["z"]
+        self.resort += 1
+
+
+
 
