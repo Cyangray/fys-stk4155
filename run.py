@@ -17,19 +17,20 @@ noise = 0.05            #if zero, no contribution. Otherwise scaling the noise.
 #How many sets do you want to share the dataset in? In a train-test situation, 
 #one of these will be picked as test, the others as train
 k = 5
-
+method = "ridge"
 
 # running k-fold algorithm:
 
 # Generate data
 dataset = data_generate(n, noise)
-liste1 = [dataset] #M: Trenger du denne, F?
+liste1 = [dataset] #M: Trenger du denne fremdeles, F?
 dataset.generate_franke()
 dataset.sort_in_k_batches(k)
 
 #Run k-fold algorithm and fit models.
-design_matrix = fit(dataset)
-sampling.kfold_cross_validation(k=k, design_matrix = design_matrix, method=design_matrix.fit_design_matrix_numpy())
+
+sample = sampling(dataset)
+sample.kfold_cross_validation(k, method)
 
 #best_predicting_beta, test_index = fitted_model.kfold_cross_validation()
 
@@ -38,15 +39,13 @@ sampling.kfold_cross_validation(k=k, design_matrix = design_matrix, method=desig
 analytical = data_generate(n, noise=0)
 analytical.generate_franke()
 
-# Plot solutions and analytical
-#z_model = fitted_model.y_tilde
-z_model = fitted_model.X @ sampling.beta
+#z_model = fitted_model.X @ sampling.beta[np.argmin(sampling.mse)]
 
 
-plot_3d(dataset.x_1d, dataset.y_1d, z_model, analytical.x_mesh, analytical.y_mesh, analytical.z_mesh, ["surface", "scatter"])
+#plot_3d(dataset.x_1d, dataset.y_1d, z_model, analytical.x_mesh, analytical.y_mesh, analytical.z_mesh, ["surface", "scatter"])
 
-mse, calc_r2 = statistics.calc_statistics(dataset.z_1d, fitted_model.y_tilde)
-print("Mean square error: ", mse, "\n", "R2: ", calc_r2)
+#mse, calc_r2 = statistics.calc_statistics(dataset.z_1d, fitted_model.y_tilde)
+#print("Mean square error: ", mse, "\n", "R2: ", calc_r2)
 #print("Averages: ", np.average(mse), np.average(calc_r2))
 
 

@@ -78,7 +78,7 @@ class data_generate():
             for i in range(k):
                 self.k_idxs[i].append( split[limits[i] : limits[i+1]] )
                 
-        self.resort += 1
+        #self.resort += 1
     
     def sort_training_test(self, i):
         """After soring the dataset into k batches, pick one of them and this one 
@@ -101,7 +101,20 @@ class data_generate():
 
     def fill_array_test_training(self):
         testing = self.test_indices ; training = self.training_indices
-        
+
+        if self.resort < 1:
+            np.savez("backup_data", N=self.N, x=self.x_1d, y=self.y_1d, z=self.z_1d) # self.x, self.y, self.x_mesh, self.y_mesh, self.z_mesh, self.x_1d, self.y_1d, self.z_1d)
+        else: # self.resort > 0:
+            data = np.load("backup_data.npz")
+            self.N = data["N"]
+            self.x_1d = data["x"]
+            self.y_1d = data["y"]
+            self.z_1d = data["z"]
+
+        print(self.resort)
+        print(len(self.x_1d))
+        self.resort += 1
+
         #ntest = len(testing)
         #ntraining = len(training)
 
@@ -116,9 +129,9 @@ class data_generate():
         self.test_y_1d = np.take(self.y_1d, testing)
         self.test_z_1d = np.take(self.z_1d, testing)
         
-        self.train_x_1d = np.take(self.x_1d,training)
-        self.train_y_1d = np.take(self.y_1d,training)
-        self.train_z_1d = np.take(self.z_1d,training)
+        self.x_1d = np.take(self.x_1d,training)
+        self.y_1d = np.take(self.y_1d,training)
+        self.z_1d = np.take(self.z_1d,training)
         
         #Rename training data to "normal" data to avoid confusion w/ other functions.
         #self.x_1d = self.train_x_1d
@@ -126,8 +139,10 @@ class data_generate():
         #self.z_1d = self.train_z_1d
         
         # Redefine lengths for training and testing.
-        self.N_training = len(training)
+        self.N = len(training)
         self.N_testing = len(testing)
+
+        
 
 
 
