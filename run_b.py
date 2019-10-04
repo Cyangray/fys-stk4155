@@ -34,10 +34,8 @@ sample = sampling(dataset)
 sample.kfold_cross_validation(k, method)
 
 print("Batches: k = ", k)
-print("Average mse: ", np.average(sample.mse))#, "\n",
-print("Best mse: ",np.min(sample.mse[np.argmin(np.abs(np.array(sample.mse)))]))
-print("Average R2: ", np.average(sample.R2))#, "\n",
-print("Best R2: ", np.min(sample.R2[np.argmin(np.abs(np.array(sample.R2)))]))
+statistics.print_mse(sample.mse)
+statistics.print_R2(sample.R2)
 
 # Plotting the best fit/best beta with the lowest mse.
 dataset.reload_data()

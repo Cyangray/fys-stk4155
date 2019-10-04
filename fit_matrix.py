@@ -16,7 +16,6 @@ class fit():
             z = self.inst.z_1d
             N = self.inst.N
 
-
         self.x = x
         self.y = y
         self.z = z
@@ -43,14 +42,13 @@ class fit():
         y_tilde = X @ beta
         return y_tilde, beta
 
-    def fit_design_matrix_ridge(self):
+    def fit_design_matrix_ridge(self, lambd):
         """Method that uses the design matrix to find the coefficients beta with 
         the ridge method, and thus the prediction y_tilde"""
         X = self.X
         z = self.z
-        l = 0.3 #arbitrary for now.
 
-        beta = np.linalg.inv(X.T.dot(X) + l*np.identity(self.l)).dot(X.T).dot(z)
+        beta = np.linalg.inv(X.T.dot(X) + lambd*np.identity(self.l)).dot(X.T).dot(z)
         y_tilde = X @ beta
         return y_tilde, beta
 
