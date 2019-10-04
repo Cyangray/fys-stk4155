@@ -10,7 +10,6 @@ class data_generate():
         self.noise = noise
         self.resort = int(0)
         
-
     def generate_franke(self):
         """ Generate franke-data """
         n = self.n
@@ -46,11 +45,6 @@ class data_generate():
         """ Sorts the data into k batches, i.e. prepares the data for k-fold cross
         validation. Recommended numbers are k = 3, 4 or 5. "random" sorts the
         dataset randomly. if random==False, it sorts them statistically"""
-        # Since training data are renamed further down, make a copy for it to be able to resort later. 
-        #if self.resort < 1:
-        #    np.savez("backup_data", self.n, self.N, self.x, self.y, self.x_mesh, self.y_mesh, self.z_mesh, self.x_1d, self.y_1d, self.z_1d)
-        #else: # self.resort > 0:
-        #    np.load("backup_data")
             
         self.k = k
         idx = 0
@@ -78,7 +72,6 @@ class data_generate():
             for i in range(k):
                 self.k_idxs[i].append( split[limits[i] : limits[i+1]] )
                 
-        #self.resort += 1
     
     def sort_training_test(self, i):
         """After soring the dataset into k batches, pick one of them and this one 
@@ -90,10 +83,6 @@ class data_generate():
         for idx in range(self.k):
             if idx != i:
                 self.training_indices += self.k_idxs[idx]
-        
-    
-
-        
 
     def load_terrain_data(self):
         self.data()
@@ -115,15 +104,6 @@ class data_generate():
         print(len(self.x_1d))
         self.resort += 1
 
-        #ntest = len(testing)
-        #ntraining = len(training)
-
-        #self.test_x_1d = np.zeros((ntest,))
-        #self.test_y_1d = np.zeros((ntest,))
-        ##self.test_z_1d = np.zeros((ntest,))
-        #self.train_x_1d = np.zeros((ntraining,))
-        #self.train_y_1d = np.zeros((ntraining,))
-        #self.train_z_1d = np.zeros((ntraining,))
 
         self.test_x_1d = np.take(self.x_1d, testing)
         self.test_y_1d = np.take(self.y_1d, testing)
@@ -133,65 +113,7 @@ class data_generate():
         self.y_1d = np.take(self.y_1d,training)
         self.z_1d = np.take(self.z_1d,training)
         
-        #Rename training data to "normal" data to avoid confusion w/ other functions.
-        #self.x_1d = self.train_x_1d
-        #self.y_1d = self.train_y_1d
-        #self.z_1d = self.train_z_1d
-        
         # Redefine lengths for training and testing.
         self.N = len(training)
         self.N_testing = len(testing)
 
-        
-
-
-
-
-        
-
-    def sort_trainingdata_random(self, fractions_trainingdata): #OBSOLETE
-        """ RANDOM! Does not give you the fraction, but the fraction is the probability of being training data.
-        Generates lists for sorting training data and test data."""
-
-        # Since training data are renamed further down, make a copy for it to be able to resort later. 
-        if self.resort < 1:
-            np.savez("backup_data", self.x, self.y, self.x_mesh, self.y_mesh, self.z_mesh, self.x_1d, self.y_1d, self.z_1d)
-        else: # self.resort > 0:
-            np.load("backup_data")
-        i = 0
-        n = self.n
-        self.training_indices = [] ; self.test_indices = []
-        # FP: Careful, here it should have probably been self.n instead of self.no_datasets...?
-        while i < self.no_datasets:    
-            if np.random.rand() > fractions_trainingdata:
-                self.training_indices.append(i)
-            else:
-                self.test_indices.append(i)
-            i += 1
-        self.resort += 1
-
-
-    def sort_trainingdata_statistical(self, fractions_trainingdata): #OBSOLETE
-        """ STATISTICAL! Does give you the fraction as close as possible.
-        Generates lists for sorting training data and test data."""
-
-        # Since training data are renamed further down, make a copy for it to be able to resort later. 
-        if self.resort < 1:
-            np.savez("backup_data", self.no_datasets, self.x, self.y, self.x_mesh, self.y_mesh, self.z_mesh, self.x_1d, self.y_1d, self.z_1d)
-        else: # self.resort > 0:
-            np.load("backup_data")
-        
-        
-        
-        # FP: Careful, here it should have probably been self.n instead of self.no_datasets...?
-        no_training_set = int(self.no_datasets*fractions_trainingdata)
-        no_test_set = self.no_datasets - no_training_set
-
-        # Lists int values, shuffles randomly and splits into two pieces.
-        split = np.arange(self.no_datasets)
-        np.random.shuffle(split)
-        
-        self.training_indices = list(split[:no_training_set])
-        self.test_indices = list(split[no_training_set:])
-
-        self.resort += 1
