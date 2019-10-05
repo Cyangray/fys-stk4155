@@ -28,26 +28,26 @@ class sampling():
 
             design_matrix.create_design_matrix(deg = deg)
             if method == "least squares":
-                z_pred, beta_pred = design_matrix.fit_design_matrix_numpy()
+                z_train, beta_pred = design_matrix.fit_design_matrix_numpy()
             elif method == "ridge":
-                z_pred, beta_pred = design_matrix.fit_design_matrix_ridge(lambd)
+                z_train, beta_pred = design_matrix.fit_design_matrix_ridge(lambd)
             elif method == "lasso":
-                z_pred, beta_pred = design_matrix.fit_design_matrix_lasso(lambd)
+                z_train, beta_pred = design_matrix.fit_design_matrix_lasso(lambd)
             else:
                 sys.exit("Wrongly designated method: ", method, " not found")
 
             #Find out which values get predicted by the training set
             X_test = design_matrix.create_design_matrix(x=inst.test_x_1d, y=inst.test_y_1d, z=inst.test_z_1d, N=inst.N_testing, deg=deg)
-            z_test = design_matrix.test_design_matrix(beta_pred)
+            z_pred = design_matrix.test_design_matrix(beta_pred, X=X_test)
 
-            # Generate analytical solution for statistics
-            z_analytical = franke_function(inst.test_x_1d, inst.test_y_1d)
+            #Take the real values from the dataset for comparison
+            z_test = inst.test_z_1d
 
-            # Statistically evaluate the training set with test and analytical solution.
-            mse, calc_r2 = statistics.calc_statistics(z_analytical, z_test)
+            # Statistically evaluate the training set with test and predicted solution.
+            mse, calc_r2 = statistics.calc_statistics(z_test, z_pred)
             self.mse.append(mse)
             self.R2.append(calc_r2)
-            self.bias_var_tradeoff.append(statistics.bias_variance_tradeoff(z=z_analytical, z_tilde=z_test, n=inst.N_testing))
+            self.bias_var_tradeoff.append(statistics.bias_variance_tradeoff(z=z_test, z_tilde=z_pred, n=inst.N_testing))
             # If needed/wanted?: 
             if abs(mse) < lowest_mse:
                 lowest_mse = mse
