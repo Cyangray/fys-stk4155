@@ -24,12 +24,12 @@ A: runfile not done at all."""
 n = 300                 # no. of x and y coordinates
 deg = 5                 #degree of polynomial
 noise = 0.05            #if zero, no contribution. Otherwise scaling the noise.
-no_lambdas = 6          # the number of labdas you want to test
+no_lambdas = 5          # the number of labdas you want to test
 
 # k batches for k-fold.
 k = 5
-method = "ridge" # "least squares", "ridge" or "lasso"
-lambdas = np.linspace(0, 1, no_lambdas)
+method = "lasso" # "least squares", "ridge" or "lasso"
+lambdas = np.linspace(1e-4, 1e-3, no_lambdas)
 
 for i in range(no_lambdas):
     # Generate data
@@ -49,8 +49,7 @@ for i in range(no_lambdas):
     # Plotting the best fit/best beta with the lowest mse.
     dataset.reload_data()
     fitted = fit(dataset)
-    liste2 = [fitted] #M: Trenger du denne fremdeles, F?
-    liste2 = [sample] #M: Trenger du denne fremdeles, F?
+    liste2 = [sample]
     fitted.create_design_matrix()
     z_model = fitted.test_design_matrix(sample.best_predicting_beta)
 

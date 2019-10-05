@@ -1,5 +1,6 @@
 import numpy as np
 import sys
+from sklearn import preprocessing
 from sklearn.linear_model import Lasso
 
 
@@ -58,15 +59,17 @@ class fit():
 
     def fit_design_matrix_lasso(self, lambd):
         """The lasso regression algorithm implemented from scikit learn."""
-        lasso = Lasso(alpha = lambd, max_iter = 10e5, tol = 0.001,  fit_intercept=False)
+        lasso = Lasso(alpha = lambd, max_iter = 10e4, tol = 0.001, normalize=True, fit_intercept=False)
         lasso.fit(self.X,self.z)
         beta = lasso.coef_
         z_tilde = self.X@beta
         return z_tilde, beta
 
-    def test_design_matrix(self, beta):
+    def test_design_matrix(self, beta, X = 0):
+        if isinstance(X, int):
+            X = self.X
         """Testing the design matrix"""
-        y_tilde = self.X @ beta
+        y_tilde = X @ beta
         return y_tilde
 
         
