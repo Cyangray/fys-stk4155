@@ -39,9 +39,9 @@ def plot_3d(x, y, z, an_x, an_y, an_z, plot_type):
 
 def plot_bias_var_tradeoff(deg, mse):
     
-    plt.title("Bias-variance tradeoff(?) for different complexity of models")
+    plt.title("Bias-variance tradeoff for different complexity of models")
     plt.xlabel("Polynomial degree")
-    plt.ylabel("Mse")
+    plt.ylabel("Bias-variance tradeoff")
     plt.plot(deg, mse)
     plt.grid('on')
     plt.show()

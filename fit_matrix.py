@@ -1,7 +1,11 @@
 import numpy as np
-#from statistics import calc_MSE, calc_R2_score, calc_R2_score_sklearn
-import statistical_functions as statistics
 import sys
+from sklearn.linear_model import Lasso
+
+
+import statistical_functions as statistics
+
+
 
 class fit():
     def __init__(self, inst): 
@@ -52,14 +56,13 @@ class fit():
         y_tilde = X @ beta
         return y_tilde, beta
 
-    def fit_design_matrix_lasso(self):
-        """Here, the lasso algorithm will be implemented."""
-        X = self.X
-        z = self.z
-
-        beta = np.linalg.inv(X.T.dot(X)).dot(X.T).dot(z)
-        y_tilde = X @ beta
-        return y_tilde, beta
+    def fit_design_matrix_lasso(self, lambd):
+        """The lasso regression algorithm implemented from scikit learn."""
+        lasso = Lasso(alpha = lambd, max_iter = 10e5, tol = 0.001,  fit_intercept=False)
+        lasso.fit(self.X,self.z)
+        beta = lasso.coef_
+        z_tilde = self.X@beta
+        return z_tilde, beta
 
     def test_design_matrix(self, beta):
         """Testing the design matrix"""

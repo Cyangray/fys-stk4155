@@ -14,10 +14,11 @@ class sampling():
         if "ridge" then the ridge method will be used, and respectively the same for "lasso"."""
 
         inst = self.inst
-        lowest_mse = 1e2
+        lowest_mse = 1e5
 
         self.mse = []
         self.R2 = []
+        self.bias_var_tradeoff = []
         design_matrix = fit(inst)
         
         for i in range(self.inst.k):
@@ -31,10 +32,9 @@ class sampling():
             elif method == "ridge":
                 z_pred, beta_pred = design_matrix.fit_design_matrix_ridge(lambd)
             elif method == "lasso":
-                z_pred, beta_pred = design_matrix.fit_design_matrix_lasso()
+                z_pred, beta_pred = design_matrix.fit_design_matrix_lasso(lambd)
             else:
-                sys.exit("Wrongly designated method: ", method)
-
+                sys.exit("Wrongly designated method: ", method, " not found")
 
             #Find out which values get predicted by the training set
             X_test = design_matrix.create_design_matrix(x=inst.test_x_1d, y=inst.test_y_1d, z=inst.test_z_1d, N=inst.N_testing, deg=deg)
@@ -47,6 +47,7 @@ class sampling():
             mse, calc_r2 = statistics.calc_statistics(z_analytical, z_test)
             self.mse.append(mse)
             self.R2.append(calc_r2)
+            self.bias_var_tradeoff.append(statistics.bias_variance_tradeoff(z=z_analytical, z_tilde=z_test, n=inst.N_testing))
             # If needed/wanted?: 
             if abs(mse) < lowest_mse:
                 lowest_mse = mse

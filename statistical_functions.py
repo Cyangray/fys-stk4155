@@ -29,12 +29,10 @@ def calc_statistics(z, z_tilde):
     calc_r2 = calc_R2_score(z, z_tilde)
     return mse, calc_r2
 
-def bias_variance_tradeoff(self, z, z_tilde, n, sigma):
+def bias_variance_tradeoff(z, z_tilde, n, sigma = 1):
     """ Calculate cost function of bias-variance tradeoff """
-    # NOT FINISHED - NEED MATHS AND STUFF
-    E = 2.3
-    a = 1/n * np.sum((z - E*z_tilde)**2)
-    b = 1/n * np.sum((z_tilde - E*z_tilde)**2 + sigma**2)
+    a = 1/n * np.sum((z - np.mean(z_tilde))**2)
+    b = 1/n * np.sum((z_tilde - np.mean(z_tilde))**2 + sigma**2)
     return a + b
 
 def print_mse(mse):

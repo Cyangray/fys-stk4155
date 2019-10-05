@@ -1,6 +1,7 @@
 import numpy as np 
 import matplotlib.pyplot as plt 
 import sys
+import os
 
 
 from data_generation import data_generate
@@ -12,7 +13,7 @@ from sampling_methods import sampling
 """Running task a) of the project.
 Generating dataset from Franke function with background noise
 for standard least square regression w/polynomials up to the
- fifth order. Also adding MSE and R^2 score."""
+fifth order. Also adding MSE and R^2 score."""
 
 
 n = 150                 # no. of x and y coordinates
@@ -43,3 +44,8 @@ print("Mean square error: ", mse, "\n", "R2 score: ", calc_r2)
 # Plot solutions and analytical for comparison
 plot_3d(dataset.x_1d, dataset.y_1d, z_model, analytical.x_mesh, analytical.y_mesh, analytical.z_mesh, ["surface", "scatter"])
 
+
+try:
+    os.remove("backup_data.npz")
+except:
+    print("Error: backup_data.npz not deleted.")

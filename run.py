@@ -1,6 +1,7 @@
 import numpy as np 
 import matplotlib.pyplot as plt 
 import sys
+import os
 
 
 from data_generation import data_generate
@@ -48,7 +49,10 @@ analytical.generate_franke()
 #print("Mean square error: ", mse, "\n", "R2: ", calc_r2)
 #print("Averages: ", np.average(mse), np.average(calc_r2))
 
-
+try:
+    os.remove("backup_data.npz")
+except:
+    print("Error: backup_data.npz not deleted.")
 
 """
 # Generate data

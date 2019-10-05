@@ -1,6 +1,7 @@
 import numpy as np 
 import matplotlib.pyplot as plt 
 import sys
+import os
 
 
 from data_generation import data_generate
@@ -50,3 +51,7 @@ analytical.generate_franke()
 # Plot
 plot_3d(dataset.x_1d, dataset.y_1d, z_model, analytical.x_mesh, analytical.y_mesh, analytical.z_mesh, ["surface", "scatter"])
 
+try:
+    os.remove("backup_data.npz")
+except:
+    print("Error: backup_data.npz not deleted.")

@@ -1,6 +1,7 @@
 import numpy as np 
 import matplotlib.pyplot as plt 
 import sys
+import os
 
 
 from data_generation import data_generate
@@ -32,6 +33,7 @@ k = 8
 method = "least squares" # "least squares", "ridge" or "lasso"
 
 best_mse = []
+best_bias_var_tradeoff = []
 
 for pol_deg in deg:
     #If best of k-fold for the plotting:
@@ -44,11 +46,18 @@ for pol_deg in deg:
     #Run k-fold algorithm and fit models.
     sample = sampling(dataset)
     sample.kfold_cross_validation(k, method, pol_deg)
-
-    best_mse.append(np.min(sample.mse[np.argmin(np.abs(np.array(sample.mse)))]))
+    
+    #best_mse.append(np.min(sample.mse[np.argmin(np.abs(np.array(sample.mse)))]))
+    best_bias_var_tradeoff.append(sample.bias_var_tradeoff[np.argmin(np.abs(np.array(sample.bias_var_tradeoff)))])
 
     print("Run for k = ", k, " and deg = ", pol_deg)
     statistics.print_mse(sample.mse)
     statistics.print_R2(sample.R2)
 
-plot_bias_var_tradeoff(deg, best_mse)
+plot_bias_var_tradeoff(deg, best_bias_var_tradeoff)
+
+
+try:
+    os.remove("backup_data.npz")
+except:
+    print("Error: backup_data.npz not deleted.")

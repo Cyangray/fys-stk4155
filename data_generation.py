@@ -95,7 +95,7 @@ class data_generate():
         sorting training data and test data."""
 
         # Since training data are renamed other places, make a copy for it to be able to resort later. 
-        self.reload_data()
+        #self.reload_data()
             
         i = 0
         n = self.n
@@ -114,7 +114,7 @@ class data_generate():
         Generates lists for sorting training data and test data."""
 
         # Since training data are renamed other places, make a copy for it to be able to resort later. 
-        self.reload_data()
+        #self.reload_data()
 
         no_training_set = int(self.no_datasets*fractions_trainingdata)
         no_test_set = self.no_datasets - no_training_set
@@ -153,7 +153,7 @@ class data_generate():
             self.x_1d = data["x"]
             self.y_1d = data["y"]
             self.z_1d = data["z"]
-        self.resort += 1
+        self.resort = 10
 
 
 
