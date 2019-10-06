@@ -42,9 +42,9 @@ best_bias_var_tradeoff = []
 for pol_deg in deg:
     #If best of k-fold for the plotting:
     # Generate data
-    dataset = data_generate(n, noise)
+    dataset = data_generate()
     liste1 = [dataset] #M: Trenger du denne fremdeles, F?
-    dataset.generate_franke()
+    dataset.generate_franke(n,noise)
     dataset.sort_in_k_batches(k)
 
     #Run k-fold algorithm and fit models.

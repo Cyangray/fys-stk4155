@@ -2,7 +2,6 @@ import numpy as np
 import sys
 from sklearn import preprocessing
 from sklearn.linear_model import Lasso
-from functions import SVDinv
 
 
 import statistical_functions as statistics

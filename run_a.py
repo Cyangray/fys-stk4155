@@ -20,9 +20,9 @@ n = 150                 # no. of x and y coordinates
 deg = 5                 # degree of polynomial
 noise = 0.05            # if zero, no contribution. Otherwise scaling the noise.
 
-dataset = data_generate(n, noise)
+dataset = data_generate()
 liste1 = [dataset] #M: Do you still need this, F?
-dataset.generate_franke()
+dataset.generate_franke(n, noise)
 dataset.normalize_dataset()
 
 # Fit design matrix
@@ -38,8 +38,8 @@ y_model = rescaled_dataset[1]
 z_model = rescaled_dataset[2]
 
 # Generate analytical solution for plotting purposes
-analytical = data_generate(n, noise=0)
-analytical.generate_franke()
+analytical = data_generate()
+analytical.generate_franke(n, noise=0)
 
 # Statistical evaluation
 mse, calc_r2 = statistics.calc_statistics(dataset.z_1d, z_model)

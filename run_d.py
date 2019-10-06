@@ -35,9 +35,9 @@ lambdas = [10**(-no_lambdas + i) for i in range(no_lambdas)]
 
 for i in range(no_lambdas):
     # Generate data
-    dataset = data_generate(n, noise)
+    dataset = data_generate()
     liste1 = [dataset] #M: Trenger du denne fremdeles, F?
-    dataset.generate_franke()
+    dataset.generate_franke(n, noise)
     dataset.normalize_dataset()
     dataset.sort_in_k_batches(k)
 
@@ -58,8 +58,8 @@ for i in range(no_lambdas):
     z_model_norm = fitted.test_design_matrix(sample.best_predicting_beta)
 
 # Generate analytical solution for plotting purposes
-analytical = data_generate(n, noise=0)
-analytical.generate_franke()
+analytical = data_generate()
+analytical.generate_franke(n, noise=0)
 
 #rescale for plotting:
 rescaled_dataset = dataset.rescale_back(z = z_model_norm)

@@ -6,14 +6,13 @@ import sys
 from functions import franke_function
 
 class data_generate():
-    def __init__(self, n, noise ):
-        self.n = n
-        self.noise = noise
+    def __init__(self):
         self.resort = int(0)
         
-    def generate_franke(self):
+    def generate_franke(self, n, noise ):
         """ Generate franke-data """
-        n = self.n
+        self.n = n
+        self.noise = noise
         self.N = n*n #Number of datapoints (in a square meshgrid)
 
         self.x = np.zeros((n))
@@ -63,9 +62,16 @@ class data_generate():
         rescaled_matrix = self.scaler.inverse_transform(dataset_matrix.T)
         return rescaled_matrix.T
     
-    def load_terrain_data(self):
-        self.data()
-        return 1. 
+    def load_terrain_data(self,terrain):
+        self.N = np.size(terrain)
+        nrows = range(np.size(terrain,0))
+        ncolumns = range(np.size(terrain,1))
+        self.x_mesh, self.y_mesh = np.meshgrid(nrows,ncolumns)
+        self.z_mesh = terrain
+
+        self.x_1d = np.ravel(self.x_mesh)
+        self.y_1d = np.ravel(self.y_mesh)
+        self.z_1d = np.ravel(self.z_mesh)
     
 
     def sort_in_k_batches(self, k, random=True):

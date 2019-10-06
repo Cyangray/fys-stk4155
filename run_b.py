@@ -25,9 +25,9 @@ k = 5
 method = "least squares" # "least squares", "ridge" or "lasso"
 
 # Generate data
-dataset = data_generate(n, noise)
+dataset = data_generate()
 liste1 = [dataset] #M: Trenger du denne fremdeles, F?
-dataset.generate_franke()
+dataset.generate_franke(n, noise)
 dataset.normalize_dataset()
 dataset.sort_in_k_batches(k)
 
@@ -48,8 +48,8 @@ rescaled_dataset = dataset.rescale_back(z = z_model_norm)
 z_model = rescaled_dataset[2]
 
 # Generate analytical solution for plotting purposes
-analytical = data_generate(n, noise=0)
-analytical.generate_franke()
+analytical = data_generate()
+analytical.generate_franke(n, noise=0)
 
 # Plot
 plot_3d(dataset.x_unscaled, dataset.y_unscaled, z_model, analytical.x_mesh, analytical.y_mesh, analytical.z_mesh, ["surface", "scatter"])
