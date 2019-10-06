@@ -41,7 +41,18 @@ def plot_bias_var_tradeoff(deg, mse):
     
     plt.title("Bias-variance tradeoff for different complexity of models")
     plt.xlabel("Polynomial degree")
-    plt.ylabel("Bias-variance tradeoff")
+    plt.ylabel("Prediction error")
     plt.plot(deg, mse)
     plt.grid('on')
+    plt.show()
+
+def plot_mse_vs_complexity(deg, mse_test, mse_train):
+    fig, ax = plt.subplots()
+    ax.set_title("Bias-variance tradeoff for different complexity of models")
+    ax.set_xlabel("Polynomial degree")
+    ax.set_ylabel("Prediction error")
+    ax.plot(deg, mse_test, 'r-', label = 'Test sample')
+    ax.plot(deg, mse_train, 'b-', label = 'Training sample')
+    plt.grid('on')
+    plt.legend()
     plt.show()

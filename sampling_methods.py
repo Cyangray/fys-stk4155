@@ -8,7 +8,7 @@ class sampling():
     def __init__(self, inst):
         self.inst = inst
 
-    def kfold_cross_validation(self, k, method, deg=5, lambd=1):
+    def kfold_cross_validation(self, k, method, deg=17, lambd=1):
         """Method that implements the k-fold cross-validation algorithm. It takes
         as input the method we want to use. if "least squares" an ordinary OLS will be evaulated.
         if "ridge" then the ridge method will be used, and respectively the same for "lasso"."""
@@ -18,6 +18,8 @@ class sampling():
 
         self.mse = []
         self.R2 = []
+        self.mse_train = []
+        self.R2_train = []
         self.bias_var_tradeoff = []
         design_matrix = fit(inst)
         
@@ -44,12 +46,18 @@ class sampling():
             z_test = inst.test_z_1d
 
             # Statistically evaluate the training set with test and predicted solution.
-            mse, calc_r2 = statistics.calc_statistics(z_test, z_pred)
+            mse, calc_r2 = statistics.calc_statistics(z_pred, z_test)
+            
+            # Statistically evaluate the training set with itself
+            mse_train, calc_r2_train = statistics.calc_statistics(z_train, inst.z_1d)
+            
             self.mse.append(mse)
             self.R2.append(calc_r2)
+            self.mse_train.append(mse_train)
+            self.R2_train.append(calc_r2_train)
             self.bias_var_tradeoff.append(statistics.bias_variance_tradeoff(z=z_test, z_tilde=z_pred, n=inst.N_testing))
             # If needed/wanted?: 
             if abs(mse) < lowest_mse:
-                lowest_mse = mse
+                lowest_mse = abs(mse)
                 self.best_predicting_beta = beta_pred
             

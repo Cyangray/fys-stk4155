@@ -2,6 +2,7 @@ import numpy as np
 import sys
 from sklearn import preprocessing
 from sklearn.linear_model import Lasso
+from functions import SVDinv
 
 
 import statistical_functions as statistics
@@ -12,7 +13,7 @@ class fit():
     def __init__(self, inst): 
         self.inst = inst
 
-    def create_design_matrix(self, x=0, y=0, z=0, N=0, deg=5):
+    def create_design_matrix(self, x=0, y=0, z=0, N=0, deg=17):
         """ Function for creating a design X-matrix with rows [1, x, y, x^2, xy, xy^2 , etc.]
         Input is x and y mesh or raveled mesh, keyword argument deg is the degree of the polynomial you want to fit. """
         
@@ -45,8 +46,10 @@ class fit():
         thus the prediction y_tilde"""
         X = self.X
         z = self.z
+        
 
-        beta = np.linalg.inv(X.T.dot(X)).dot(X.T).dot(z)
+        beta = np.linalg.pinv(X.T.dot(X)).dot(X.T).dot(z)
+        
         y_tilde = X @ beta
         return y_tilde, beta
 
@@ -56,7 +59,7 @@ class fit():
         X = self.X
         z = self.z
 
-        beta = np.linalg.inv(X.T.dot(X) + lambd*np.identity(self.l)).dot(X.T).dot(z)
+        beta = np.linalg.pinv(X.T.dot(X) + lambd*np.identity(self.l)).dot(X.T).dot(z)
         y_tilde = X @ beta
         return y_tilde, beta
 
@@ -74,7 +77,6 @@ class fit():
         """Testing the design matrix"""
         y_tilde = X @ beta
         return y_tilde
-
         
 
      

@@ -6,7 +6,7 @@ import os
 
 from data_generation import data_generate
 from fit_matrix import fit
-from visualization import plot_3d, plot_bias_var_tradeoff
+from visualization import plot_3d, plot_bias_var_tradeoff, plot_mse_vs_complexity
 import statistical_functions as statistics
 from sampling_methods import sampling
 
@@ -22,17 +22,21 @@ Q: Plotting the bias-variance tradeoff on y-axis? Or just mse etc?
 Need to do: 
 - Correct sampling
 - Bias-var tradeoff correct
-- Plor correct thing. """
+- Plot correct thing. """
 
-n = 400                 # no. of x and y coordinates
-deg = range(2,9)        # degree of polynomial
-noise = 0.01            # if zero, no contribution. Otherwise scaling the noise.
+n = 100                 # no. of x and y coordinates
+deg = range(1,20)        # degree of polynomial
+noise = 0.1            # if zero, no contribution. Otherwise scaling the noise.
 
 # k batches for k-fold.
-k = 8
+k = 10
 method = "least squares" # "least squares", "ridge" or "lasso"
+#method = "ridge"
 
-best_mse = []
+best_mse_train = []
+best_mse_test = []
+average_mse_train = []
+average_mse_test = []
 best_bias_var_tradeoff = []
 
 for pol_deg in deg:
@@ -45,16 +49,26 @@ for pol_deg in deg:
 
     #Run k-fold algorithm and fit models.
     sample = sampling(dataset)
-    sample.kfold_cross_validation(k, method, pol_deg)
+    if method == "least squares":
+        sample.kfold_cross_validation(k, method, deg = pol_deg)
+    else:
+        sample.kfold_cross_validation(k, method, deg = pol_deg, lambd = 1e-2)
     
-    #best_mse.append(np.min(sample.mse[np.argmin(np.abs(np.array(sample.mse)))]))
+    #best_mse_test.append(np.min(sample.mse[np.argmin(np.abs(np.array(sample.mse)))]))
+    #best_mse_train.append(np.min(sample.mse_train[np.argmin(np.abs(np.array(sample.mse)))]))
+    best_mse_test.append(np.min(sample.mse))
+    best_mse_train.append(sample.mse_train[ np.argmin(sample.mse)])
+    average_mse_test.append(np.average(sample.mse))
+    average_mse_train.append(np.average(sample.mse_train))
     best_bias_var_tradeoff.append(sample.bias_var_tradeoff[np.argmin(np.abs(np.array(sample.bias_var_tradeoff)))])
 
-    print("Run for k = ", k, " and deg = ", pol_deg)
+    print("\n" + "Run for k = ", k, " and deg = ", pol_deg)
     statistics.print_mse(sample.mse)
     statistics.print_R2(sample.R2)
 
-plot_bias_var_tradeoff(deg, best_bias_var_tradeoff)
+#plot_bias_var_tradeoff(deg, best_bias_var_tradeoff)
+plot_mse_vs_complexity(deg, best_mse_test, best_mse_train)
+plot_mse_vs_complexity(deg, average_mse_test, average_mse_train)
 
 
 try:
