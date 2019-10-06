@@ -15,6 +15,7 @@ class fit():
     def create_design_matrix(self, x=0, y=0, z=0, N=0, deg=5):
         """ Function for creating a design X-matrix with rows [1, x, y, x^2, xy, xy^2 , etc.]
         Input is x and y mesh or raveled mesh, keyword argument deg is the degree of the polynomial you want to fit. """
+        
         if type(x) == int:
             x = self.inst.x_1d
             y = self.inst.y_1d
@@ -36,6 +37,8 @@ class fit():
         #Design matrix
         self.X = X
         return X
+    
+    
         
     def fit_design_matrix_numpy(self):
         """Method that uses the design matrix to find the coefficients beta, and
@@ -59,11 +62,11 @@ class fit():
 
     def fit_design_matrix_lasso(self, lambd):
         """The lasso regression algorithm implemented from scikit learn."""
-        lasso = Lasso(alpha = lambd, max_iter = 10e4, tol = 0.001, normalize=True, fit_intercept=False)
+        lasso = Lasso(alpha = lambd, max_iter = 10e5, tol = 0.01, normalize= (not self.inst.normalized), fit_intercept=(not self.inst.normalized))
         lasso.fit(self.X,self.z)
         beta = lasso.coef_
-        z_tilde = self.X@beta
-        return z_tilde, beta
+        y_tilde = self.X@beta
+        return y_tilde, beta
 
     def test_design_matrix(self, beta, X = 0):
         if isinstance(X, int):

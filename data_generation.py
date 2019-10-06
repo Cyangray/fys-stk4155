@@ -1,4 +1,5 @@
 import numpy as np
+from sklearn import preprocessing
 import sys
 
 
@@ -40,7 +41,28 @@ class data_generate():
         if self.noise != 0: #0.5 for centering from [0,1] to [-0.5,0.5]
             self.z_1d += (np.random.randn(n*n)-0.5) * self.noise
 
-
+    
+    def normalize_dataset(self):
+        self.normalized = True
+        self.x_unscaled = self.x_1d.copy()
+        self.y_unscaled = self.y_1d.copy()
+        dataset_matrix = np.stack((self.x_1d, self.y_1d, self.z_1d)).T
+        self.scaler = preprocessing.StandardScaler().fit(dataset_matrix)
+        [self.x_1d, self.y_1d, self.z_1d] = self.scaler.transform(dataset_matrix).T
+        #scaled_matrix = self.scaler.transform(dataset_matrix)
+        #self.x_1d, self.y_1d, self.z_1d = scaled_matrix[:,0].T, scaled_matrix[:,1].T, scaled_matrix[:,2].T
+            
+    def rescale_back(self, x=0, y=0, z=0):
+        if isinstance(x, int):
+            x = self.x_1d
+        if isinstance(y, int):
+            y = self.y_1d
+        if isinstance(z, int):
+            z = self.z_1d
+        dataset_matrix = np.stack((x, y, z))
+        rescaled_matrix = self.scaler.inverse_transform(dataset_matrix.T)
+        return rescaled_matrix.T
+    
     def load_terrain_data(self):
         self.data()
         return 1. 

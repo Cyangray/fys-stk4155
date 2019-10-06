@@ -20,10 +20,10 @@ n = 150                 # no. of x and y coordinates
 deg = 5                 # degree of polynomial
 noise = 0.05            # if zero, no contribution. Otherwise scaling the noise.
 
-
 dataset = data_generate(n, noise)
 liste1 = [dataset] #M: Do you still need this, F?
 dataset.generate_franke()
+dataset.normalize_dataset()
 
 # Fit design matrix
 fitted_model = fit(dataset)
@@ -31,7 +31,11 @@ liste2 = [fitted_model] #M: Do you still need this, F?
 
 #Ordinary fitting
 fitted_model.X = fitted_model.create_design_matrix(deg)
-z_model, beta = fitted_model.fit_design_matrix_numpy()
+z_model_norm, beta = fitted_model.fit_design_matrix_numpy()
+rescaled_dataset = dataset.rescale_back(z = z_model_norm)
+x_model = rescaled_dataset[0]
+y_model = rescaled_dataset[1]
+z_model = rescaled_dataset[2]
 
 # Generate analytical solution for plotting purposes
 analytical = data_generate(n, noise=0)
@@ -42,7 +46,7 @@ mse, calc_r2 = statistics.calc_statistics(dataset.z_1d, z_model)
 print("Mean square error: ", mse, "\n", "R2 score: ", calc_r2)
 
 # Plot solutions and analytical for comparison
-plot_3d(dataset.x_1d, dataset.y_1d, z_model, analytical.x_mesh, analytical.y_mesh, analytical.z_mesh, ["surface", "scatter"])
+plot_3d(dataset.x_unscaled, dataset.y_unscaled, z_model, analytical.x_mesh, analytical.y_mesh, analytical.z_mesh, ["surface", "scatter"])
 
 
 try:

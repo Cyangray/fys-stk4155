@@ -28,6 +28,7 @@ method = "least squares" # "least squares", "ridge" or "lasso"
 dataset = data_generate(n, noise)
 liste1 = [dataset] #M: Trenger du denne fremdeles, F?
 dataset.generate_franke()
+dataset.normalize_dataset()
 dataset.sort_in_k_batches(k)
 
 #Run k-fold algorithm and fit models.
@@ -42,14 +43,16 @@ statistics.print_R2(sample.R2)
 dataset.reload_data()
 fitted = fit(dataset)
 fitted.create_design_matrix()
-z_model = fitted.test_design_matrix(sample.best_predicting_beta)
+z_model_norm = fitted.test_design_matrix(sample.best_predicting_beta)
+rescaled_dataset = dataset.rescale_back(z = z_model_norm)
+z_model = rescaled_dataset[2]
 
 # Generate analytical solution for plotting purposes
 analytical = data_generate(n, noise=0)
 analytical.generate_franke()
 
 # Plot
-plot_3d(dataset.x_1d, dataset.y_1d, z_model, analytical.x_mesh, analytical.y_mesh, analytical.z_mesh, ["surface", "scatter"])
+plot_3d(dataset.x_unscaled, dataset.y_unscaled, z_model, analytical.x_mesh, analytical.y_mesh, analytical.z_mesh, ["surface", "scatter"])
 
 try:
     os.remove("backup_data.npz")
