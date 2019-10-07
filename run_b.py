@@ -19,19 +19,19 @@ and evaluating MSE and R^2 for this sampling method."""
 n = 300                 # no. of x and y coordinates
 deg = 5                 #degree of polynomial
 noise = 0.05            #if zero, no contribution. Otherwise scaling the noise.
+k = 5                       # k batches for k-fold.
+method = "least squares"    # "least squares", "ridge" or "lasso"
 
-# k batches for k-fold.
-k = 5
-method = "least squares" # "least squares", "ridge" or "lasso"
-
-# Generate data
+# Load dataset and generate Franke function
 dataset = data_generate()
 liste1 = [dataset] #M: Trenger du denne fremdeles, F?
 dataset.generate_franke(n, noise)
+
+# Normalize the dataset and divide in samples
 dataset.normalize_dataset()
 dataset.sort_in_k_batches(k)
 
-#Run k-fold algorithm and fit models.
+# Run k-fold algorithm and fit models.
 sample = sampling(dataset)
 sample.kfold_cross_validation(k, method)
 

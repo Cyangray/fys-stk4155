@@ -24,28 +24,30 @@ Need to do:
 - Bias-var tradeoff correct
 - Plot correct thing. """
 
-n = 100                 # no. of x and y coordinates
-deg = range(1,20)        # degree of polynomial
-noise = 0.1            # if zero, no contribution. Otherwise scaling the noise.
-
-# k batches for k-fold.
-k = 10
-method = "least squares" # "least squares", "ridge" or "lasso"
+n = 200                     # no. of x and y coordinates
+deg = range(1,20)           # degree of polynomial
+noise = 0.1                 # if zero, no contribution. Otherwise scaling the noise.
+k = 20                      # k batches for k-fold.
+method = "least squares"    # "least squares", "ridge" or "lasso"
 #method = "ridge"
 
+# Initialize lists for plotting
 best_mse_train = []
 best_mse_test = []
 average_mse_train = []
 average_mse_test = []
 best_bias_var_tradeoff = []
 
+# Generate dataset and Franke function
+dataset = data_generate()
+liste1 = [dataset] #M: Trenger du denne fremdeles, F?
+dataset.generate_franke(n,noise)
+
+#Normalize and divide in samples
+dataset.normalize_dataset()
+dataset.sort_in_k_batches(k)
+
 for pol_deg in deg:
-    #If best of k-fold for the plotting:
-    # Generate data
-    dataset = data_generate()
-    liste1 = [dataset] #M: Trenger du denne fremdeles, F?
-    dataset.generate_franke(n,noise)
-    dataset.sort_in_k_batches(k)
 
     #Run k-fold algorithm and fit models.
     sample = sampling(dataset)
@@ -68,7 +70,7 @@ for pol_deg in deg:
 
 #plot_bias_var_tradeoff(deg, best_bias_var_tradeoff)
 plot_mse_vs_complexity(deg, best_mse_test, best_mse_train)
-plot_mse_vs_complexity(deg, average_mse_test, average_mse_train)
+plot_mse_vs_complexity(deg, average_mse_test, average_mse_train) #<--- AVERAGE IS THE GOOD ONE
 
 
 try:

@@ -45,6 +45,7 @@ class data_generate():
         self.normalized = True
         self.x_unscaled = self.x_1d.copy()
         self.y_unscaled = self.y_1d.copy()
+        self.z_unscaled = self.z_1d.copy()
         dataset_matrix = np.stack((self.x_1d, self.y_1d, self.z_1d)).T
         self.scaler = preprocessing.StandardScaler().fit(dataset_matrix)
         [self.x_1d, self.y_1d, self.z_1d] = self.scaler.transform(dataset_matrix).T
@@ -52,6 +53,7 @@ class data_generate():
         #self.x_1d, self.y_1d, self.z_1d = scaled_matrix[:,0].T, scaled_matrix[:,1].T, scaled_matrix[:,2].T
             
     def rescale_back(self, x=0, y=0, z=0):
+        self.normalized = False
         if isinstance(x, int):
             x = self.x_1d
         if isinstance(y, int):
@@ -107,7 +109,7 @@ class data_generate():
                 
     
     def sort_training_test_kfold(self, i):
-        """After soring the dataset into k batches, pick one of them and this one 
+        """After sorting the dataset into k batches, pick one of them and this one 
         will play the part of the test set, while the rest will end up being 
         the training set. the input i should be an integer between 0 and k-1, and it
         picks the test set. """

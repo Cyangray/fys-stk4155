@@ -13,23 +13,23 @@ from sampling_methods import sampling
 
 # Load the terrain
 terrain1 = imread('SRTM_data_Norway_1.tif')
-# Show the terrain
-plt.figure()
-plt.title('Terrain over Norway 1')
-plt.imshow(terrain1, cmap='gray')
-plt.xlabel('X')
-plt.ylabel('Y')
-plt.show()
 
+#reduce the terrain file by 16
 terrain1 = reduce4(terrain1)
 terrain1 = reduce4(terrain1)
+
+#Load the dataset
 dataset = data_generate()
 dataset.load_terrain_data(terrain1)
+
+#Regression parameters
 k=5
 method = 'ridge'
 lambd = 1e-2
 
 liste1 = [dataset] #M: Trenger du denne fremdeles, F?
+
+#Normalize and sample the dataset
 dataset.normalize_dataset()
 dataset.sort_in_k_batches(k)
 
@@ -37,6 +37,7 @@ dataset.sort_in_k_batches(k)
 sample = sampling(dataset)
 sample.kfold_cross_validation(k, method, lambd=lambd)
 
+#Print statistics
 print("\n"+"Batches: k = ", k, " Lambda = ", lambd)
 statistics.print_mse(sample.mse)
 statistics.print_R2(sample.R2)
@@ -51,7 +52,7 @@ rescaled_dataset = dataset.rescale_back(z = z_model_norm)
 z_model = rescaled_dataset[2]
 
 #plot_3d_terrain(dataset.x_unscaled, dataset.y_unscaled, z_model)
-plot_3d_terrain(rescaled_dataset[0], rescaled_dataset[1], rescaled_dataset[2])
+plot_3d_terrain(rescaled_dataset[0], rescaled_dataset[1], rescaled_dataset[2], dataset.x_unscaled, dataset.y_unscaled, dataset.z_unscaled)
 
 
 
