@@ -6,7 +6,7 @@ import os
 
 from data_generation import data_generate
 from fit_matrix import fit
-from visualization import plot_3d, plot_bias_var_tradeoff, plot_mse_vs_complexity
+from visualization import plot_3d, plot_bias_var_tradeoff, plot_mse_vs_complexity, plot_bias_variance_vs_complexity
 import statistical_functions as statistics
 from sampling_methods import sampling
 
@@ -25,7 +25,7 @@ Need to do:
 - Plot correct thing. """
 
 n = 200                     # no. of x and y coordinates
-deg = range(1,20)           # degree of polynomial
+deg = range(3,10)           # degree of polynomial
 noise = 0.1                 # if zero, no contribution. Otherwise scaling the noise.
 k = 20                      # k batches for k-fold.
 method = "least squares"    # "least squares", "ridge" or "lasso"
@@ -36,7 +36,8 @@ best_mse_train = []
 best_mse_test = []
 average_mse_train = []
 average_mse_test = []
-best_bias_var_tradeoff = []
+average_bias = []
+average_variance = []
 
 # Generate dataset and Franke function
 dataset = data_generate()
@@ -62,15 +63,16 @@ for pol_deg in deg:
     best_mse_train.append(sample.mse_train[ np.argmin(sample.mse)])
     average_mse_test.append(np.average(sample.mse))
     average_mse_train.append(np.average(sample.mse_train))
-    best_bias_var_tradeoff.append(sample.bias_var_tradeoff[np.argmin(np.abs(np.array(sample.bias_var_tradeoff)))])
+    average_bias.append(np.average(sample.bias))
+    average_variance.append(np.average(sample.variance))
 
     print("\n" + "Run for k = ", k, " and deg = ", pol_deg)
     statistics.print_mse(sample.mse)
     statistics.print_R2(sample.R2)
 
 #plot_bias_var_tradeoff(deg, best_bias_var_tradeoff)
-plot_mse_vs_complexity(deg, best_mse_test, best_mse_train)
 plot_mse_vs_complexity(deg, average_mse_test, average_mse_train) #<--- AVERAGE IS THE GOOD ONE
+plot_bias_variance_vs_complexity(deg, average_bias, average_variance)
 
 
 try:

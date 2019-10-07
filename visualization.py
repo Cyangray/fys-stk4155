@@ -74,3 +74,19 @@ def plot_mse_vs_complexity(deg, mse_test, mse_train):
     plt.grid('on')
     plt.legend()
     plt.show()
+
+def plot_bias_variance_vs_complexity(deg, bias, variance):
+    #fig = plt.figure()
+    plt.title("Bias-variance tradeoff for different complexity of models")
+    ax1 = plt.subplot(211)
+    plt.ylabel("Bias values")
+    plt.plot(deg, bias, 'r-', label = 'Bias')
+    plt.grid('on')
+    
+    ax2 = plt.subplot(212, sharex = ax1)
+    plt.xlabel("Polynomial degree")
+    plt.ylabel("Variance values")
+    plt.plot(deg, variance, 'b-', label = 'Variance')
+    plt.grid('on')
+    plt.legend()
+    plt.show()

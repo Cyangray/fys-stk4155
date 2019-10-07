@@ -20,26 +20,26 @@ Q: Exactly what to run for what.. :)
 A: runfile not done at all."""
 
 
-
+#Parameters for the simulation
 n = 300                 # no. of x and y coordinates
 deg = 5                 #degree of polynomial
 noise = 0.05            #if zero, no contribution. Otherwise scaling the noise.
 no_lambdas = 6          # the number of labdas you want to test
-
-# k batches for k-fold.
-k = 5
-normalize = True
-method = "ridge" # "least squares", "ridge" or "lasso"
-#lambdas = np.linspace(1e-4, 1e-4, no_lambdas)
+k = 5                   # k batches for k-fold.
+method = "ridge"        # "least squares", "ridge" or "lasso"
 lambdas = [10**(-no_lambdas + i) for i in range(no_lambdas)]
 
+
+# Load dataset and Franke function
+dataset = data_generate()
+liste1 = [dataset] #M: Trenger du denne fremdeles, F?
+dataset.generate_franke(n, noise)
+
+# Normalize the dataset and divide in samples
+dataset.normalize_dataset()
+dataset.sort_in_k_batches(k)
+
 for i in range(no_lambdas):
-    # Generate data
-    dataset = data_generate()
-    liste1 = [dataset] #M: Trenger du denne fremdeles, F?
-    dataset.generate_franke(n, noise)
-    dataset.normalize_dataset()
-    dataset.sort_in_k_batches(k)
 
     #Run k-fold algorithm and fit models.
     sample = sampling(dataset)
