@@ -3,10 +3,7 @@ import sys
 from sklearn import preprocessing
 from sklearn.linear_model import Lasso
 
-
 import statistical_functions as statistics
-
-
 
 class fit():
     def __init__(self, inst): 
@@ -38,15 +35,12 @@ class fit():
         self.X = X
         return X
     
-    
-        
     def fit_design_matrix_numpy(self):
         """Method that uses the design matrix to find the coefficients beta, and
         thus the prediction y_tilde"""
         X = self.X
         z = self.z
         
-
         beta = np.linalg.pinv(X.T.dot(X)).dot(X.T).dot(z)
         
         y_tilde = X @ beta
@@ -71,11 +65,9 @@ class fit():
         return y_tilde, beta
 
     def test_design_matrix(self, beta, X = 0):
+        """Testing the design matrix with a beta and"""
         if isinstance(X, int):
             X = self.X
-        """Testing the design matrix"""
         y_tilde = X @ beta
         return y_tilde
         
-
-     
