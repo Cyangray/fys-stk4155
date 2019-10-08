@@ -169,7 +169,3 @@ class data_generate():
         self.y_1d = data["y"]
         self.z_1d = data["z"]
 
-
-
-
-
