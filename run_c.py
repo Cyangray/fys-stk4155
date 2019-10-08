@@ -26,8 +26,8 @@ Need to do:
 
 n = 100                     # no. of x and y coordinates
 deg = range(1,12)           # degree of polynomial
-noise = 0.1                 # if zero, no contribution. Otherwise scaling the noise.
-k = 5                      # k batches for k-fold.
+noise = 0.05                # if zero, no contribution. Otherwise scaling the noise.
+k = 5                       # k batches for k-fold.
 #method = "least squares"    # "least squares", "ridge" or "lasso"
 method = "lasso"
 
