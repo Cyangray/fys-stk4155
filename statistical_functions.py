@@ -29,7 +29,7 @@ def calc_statistics(z, z_tilde):
     calc_r2 = calc_R2_score(z, z_tilde)
     return mse, calc_r2
 
-def calc_bias_variance(z, z_tilde, sigma = 1):
+def calc_bias_variance(z, z_tilde):
     """ Calculate the bias and the variance of a given model"""
     n = len(z)
     Eztilde = np.mean(z_tilde)

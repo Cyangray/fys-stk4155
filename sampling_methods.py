@@ -3,6 +3,7 @@ import numpy as np
 import statistical_functions as statistics
 from fit_matrix import fit
 from functions import franke_function
+import copy
 
 class sampling():
     def __init__(self, inst):
@@ -23,7 +24,7 @@ class sampling():
         self.bias = []
         self.variance = []
         design_matrix = fit(inst)
-        whole_DM = design_matrix.create_design_matrix(deg = deg) #design matrix for the whole dataset
+        whole_DM = design_matrix.create_design_matrix(deg = deg).copy() #design matrix for the whole dataset
         whole_z = inst.z_1d.copy() #save the whole output
         
         for i in range(self.inst.k):

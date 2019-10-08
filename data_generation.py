@@ -8,6 +8,7 @@ from functions import franke_function
 class data_generate():
     def __init__(self):
         self.resort = int(0)
+        self.normalized = False
         
     def generate_franke(self, n, noise ):
         """ Generate franke-data """
