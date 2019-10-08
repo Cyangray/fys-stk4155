@@ -7,7 +7,7 @@ from functions import reduce4
 
 from data_generation import data_generate
 from fit_matrix import fit
-from visualization import plot_3d, plot_3d_terrain, plot_bias_var_tradeoff, plot_mse_vs_complexity
+from visualization import plot_3d, plot_3d_terrain, plot_bias_var_tradeoff, plot_mse_vs_complexity, plot_cmap
 import statistical_functions as statistics
 from sampling_methods import sampling
 
