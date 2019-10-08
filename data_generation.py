@@ -38,8 +38,8 @@ class data_generate():
         self.y_1d = np.ravel(self.y_mesh)
         self.z_1d = np.ravel(self.z_mesh)
         
-        if self.noise != 0: #0.5 for centering from [0,1] to [-0.5,0.5]
-            self.z_1d += (np.random.randn(n*n)-0.5) * self.noise
+        if self.noise != 0:
+            self.z_1d += np.random.randn(n*n) * self.noise
 
     
     def normalize_dataset(self):
