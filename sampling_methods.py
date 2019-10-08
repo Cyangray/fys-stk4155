@@ -9,7 +9,7 @@ class sampling():
     def __init__(self, inst):
         self.inst = inst
 
-    def kfold_cross_validation(self, k, method, deg=17, lambd=1):
+    def kfold_cross_validation(self, k, method, deg=5, lambd=1):
         """Method that implements the k-fold cross-validation algorithm. It takes
         as input the method we want to use. if "least squares" an ordinary OLS will be evaulated.
         if "ridge" then the ridge method will be used, and respectively the same for "lasso"."""
@@ -59,7 +59,8 @@ class sampling():
             mse_train, calc_r2_train = statistics.calc_statistics(inst.z_1d, z_train)
             
             # Get the values for the bias and the variance
-            bias, variance = statistics.calc_bias_variance(z_test, z_pred)
+            #bias, variance = statistics.calc_bias_variance(z_test, z_pred)
+            bias, variance = statistics.calc_bias_variance(whole_z, whole_z_pred)
             
             self.mse.append(mse)
             self.R2.append(calc_r2)
