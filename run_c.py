@@ -24,12 +24,12 @@ Need to do:
 - Bias-var tradeoff correct
 - Plot correct thing. """
 
-n = 200                     # no. of x and y coordinates
-deg = range(3,10)           # degree of polynomial
+n = 100                     # no. of x and y coordinates
+deg = range(1,12)           # degree of polynomial
 noise = 0.1                 # if zero, no contribution. Otherwise scaling the noise.
-k = 20                      # k batches for k-fold.
-method = "least squares"    # "least squares", "ridge" or "lasso"
-#method = "ridge"
+k = 5                      # k batches for k-fold.
+#method = "least squares"    # "least squares", "ridge" or "lasso"
+method = "lasso"
 
 # Initialize lists for plotting
 best_mse_train = []
