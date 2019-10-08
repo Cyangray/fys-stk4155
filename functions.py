@@ -2,6 +2,7 @@ import numpy as np
 from math import floor
 
 def franke_function(x,y):
+    """ Generate values for the franke function"""
     term1 = 0.75*np.exp(-(0.25*(9*x-2)**2) - 0.25*((9*y-2)**2))
     term2 = 0.75*np.exp(-((9*x+1)**2)/49.0 - 0.1*(9*y+1))
     term3 = 0.5*np.exp(-(9*x-7)**2/4.0 - 0.25*((9*y-3)**2))
@@ -9,10 +10,11 @@ def franke_function(x,y):
     return term1 + term2 + term3 + term4
 
 def is_odd(num):
+    """ Returns True if number is odd, False is even. Used for scaling data. """
     return num & 0x1
 
 def reduce4(A):
-    """ reduce the dimension of a matrix by four times, by only taking the first 
+    """ Reduce the dimension of a matrix by four times, by only taking the first 
     value of every second for both axis"""
     
     A_rows = np.size(A,0)

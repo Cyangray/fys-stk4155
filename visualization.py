@@ -36,10 +36,11 @@ def plot_3d(x, y, z, an_x, an_y, an_z, plot_type):
         
         
 def plot_3d_terrain(x, y, z, x_map, y_map, z_map):
+    """ Plots 3d terrain with trisurf"""
     fig = plt.figure()
     ax = fig.gca(projection='3d')
     
-    surf1 = ax.plot_trisurf(x_map, y_map, z_map, cmap=cm.coolwarm)
+    surf1 = ax.plot_trisurf(x_map, y_map, z_map, cmap=cm.coolwarm, alpha=0.2)
     
     surf2 = ax.scatter(x, y, z)
     
@@ -55,8 +56,17 @@ def plot_3d_terrain(x, y, z, x_map, y_map, z_map):
 
     plt.show()
 
+def plot_cmap(x, y, z, x_map, y_map, z_map):
+    f, ax = plt.subplots(1,2, sharex=True, sharey=True)
+    ax[0].tripcolor(x,y,z)
+    ax[1].tricontourf(x,y,z, 20) # choose 20 contour levels, just to show how good its interpolation is
+    ax[1].plot(x,y, 'ko ')
+    ax[0].plot(x,y, 'ko ')
+    plt.show()
+    plt.savefig('test.png')
+
 def plot_bias_var_tradeoff(deg, mse):
-    
+    """ Plots bias-variance tradeoff for different polynoial degrees of models. """
     plt.title("Bias-variance tradeoff for different complexity of models")
     plt.xlabel("Polynomial degree")
     plt.ylabel("Prediction error")
@@ -65,6 +75,7 @@ def plot_bias_var_tradeoff(deg, mse):
     plt.show()
 
 def plot_mse_vs_complexity(deg, mse_test, mse_train):
+    """ Plots mse vs. polynomial degree of matrix. """
     fig, ax = plt.subplots()
     ax.set_title("Bias-variance tradeoff for different complexity of models")
     ax.set_xlabel("Polynomial degree")
@@ -76,6 +87,7 @@ def plot_mse_vs_complexity(deg, mse_test, mse_train):
     plt.show()
 
 def plot_bias_variance_vs_complexity(deg, bias, variance):
+    """ Plots bias-variance vs. polynomial degree of matrix. """
     fig, (ax1, ax2) = plt.subplots(nrows = 2, ncols = 1, sharex = True)
     ax1.set_title("Bias-variance tradeoff for different complexity of models")
     #ax1 = plt.subplot(211)
@@ -91,3 +103,6 @@ def plot_bias_variance_vs_complexity(deg, bias, variance):
     ax2.grid('on')
     ax2.legend()
     plt.show()
+
+    
+
