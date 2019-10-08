@@ -29,11 +29,13 @@ def calc_statistics(z, z_tilde):
     calc_r2 = calc_R2_score(z, z_tilde)
     return mse, calc_r2
 
-def bias_variance_tradeoff(z, z_tilde, n, sigma = 1):
-    """ Calculate cost function of bias-variance tradeoff """
-    a = 1/n * np.sum((z - np.mean(z_tilde))**2)
-    b = 1/n * np.sum((z_tilde - np.mean(z_tilde))**2 + sigma**2)
-    return a + b
+def calc_bias_variance(z, z_tilde):
+    """ Calculate the bias and the variance of a given model"""
+    n = len(z)
+    Eztilde = np.mean(z_tilde)
+    bias = 1/n * np.sum((z - Eztilde)**2)
+    variance = 1/n * np.sum((z_tilde - Eztilde)**2)
+    return bias, variance
 
 def print_mse(mse):
     print("Average mse: ", np.average(mse))

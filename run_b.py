@@ -19,18 +19,19 @@ and evaluating MSE and R^2 for this sampling method."""
 n = 300                 # no. of x and y coordinates
 deg = 5                 #degree of polynomial
 noise = 0.05            #if zero, no contribution. Otherwise scaling the noise.
+k = 5                       # k batches for k-fold.
+method = "least squares"    # "least squares", "ridge" or "lasso"
 
-# k batches for k-fold.
-k = 5
-method = "least squares" # "least squares", "ridge" or "lasso"
-
-# Generate data
-dataset = data_generate(n, noise)
+# Load dataset and generate Franke function
+dataset = data_generate()
 liste1 = [dataset] #M: Trenger du denne fremdeles, F?
-dataset.generate_franke()
+dataset.generate_franke(n, noise)
+
+# Normalize the dataset and divide in samples
+dataset.normalize_dataset()
 dataset.sort_in_k_batches(k)
 
-#Run k-fold algorithm and fit models.
+# Run k-fold algorithm and fit models.
 sample = sampling(dataset)
 sample.kfold_cross_validation(k, method)
 
@@ -42,14 +43,16 @@ statistics.print_R2(sample.R2)
 dataset.reload_data()
 fitted = fit(dataset)
 fitted.create_design_matrix()
-z_model = fitted.test_design_matrix(sample.best_predicting_beta)
+z_model_norm = fitted.test_design_matrix(sample.best_predicting_beta)
+rescaled_dataset = dataset.rescale_back(z = z_model_norm)
+z_model = rescaled_dataset[2]
 
 # Generate analytical solution for plotting purposes
-analytical = data_generate(n, noise=0)
-analytical.generate_franke()
+analytical = data_generate()
+analytical.generate_franke(n, noise=0)
 
 # Plot
-plot_3d(dataset.x_1d, dataset.y_1d, z_model, analytical.x_mesh, analytical.y_mesh, analytical.z_mesh, ["surface", "scatter"])
+plot_3d(dataset.x_unscaled, dataset.y_unscaled, z_model, analytical.x_mesh, analytical.y_mesh, analytical.z_mesh, ["surface", "scatter"])
 
 try:
     os.remove("backup_data.npz")
