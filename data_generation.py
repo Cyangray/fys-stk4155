@@ -178,13 +178,26 @@ class data_generate():
     def reload_data(self):
         if self.resort < 1:
             np.savez("backup_data", N=self.N, x=self.x_1d, y=self.y_1d, z=self.z_1d)
-        else: # self.resort > 0:
+        else: # self.resort >= 1:
             data = np.load("backup_data.npz")
             self.N = data["N"]
             self.x_1d = data["x"]
             self.y_1d = data["y"]
             self.z_1d = data["z"]
         self.resort = 10
+        
+        
+    def save_data(self):
+        np.savez("pregen_dataset", N=self.N, x=self.x_1d, y=self.y_1d, z=self.z_1d)
+
+        
+    def load_data(self):
+        data = np.load("pregen_dataset.npz")
+        self.N = data["N"]
+        self.x_1d = data["x"]
+        self.y_1d = data["y"]
+        self.z_1d = data["z"]
+
 
 
 
