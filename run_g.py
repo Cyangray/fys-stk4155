@@ -51,9 +51,16 @@ z_model_norm = fitted.test_design_matrix(sample.best_predicting_beta)
 rescaled_dataset = dataset.rescale_back(z = z_model_norm)
 z_model = rescaled_dataset[2]
 
+z_matrix = np.empty(np.shape(terrain1))
+z_matrix[:] = np.nan
+for i, z_value in enumerate(z_model):
+    z_matrix[int(rescaled_dataset[0,i]), int(rescaled_dataset[1,i])] = z_value
+
+plt.imshow(z_matrix, cmap = cm.coolwarm)
+plt.show()
 #plot_3d_terrain(dataset.x_unscaled, dataset.y_unscaled, z_model)
 #plot_3d_terrain(rescaled_dataset[0], rescaled_dataset[1], rescaled_dataset[2], dataset.x_unscaled, dataset.y_unscaled, dataset.z_unscaled)
-plot_cmap(rescaled_dataset[0], rescaled_dataset[1], rescaled_dataset[2], dataset.x_unscaled, dataset.y_unscaled, dataset.z_unscaled)
+
 
 
 
