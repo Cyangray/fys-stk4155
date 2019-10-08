@@ -8,6 +8,7 @@ import numpy as np
 def plot_3d(x, y, z, an_x, an_y, an_z, plot_type):
     fig = plt.figure()
     ax = fig.gca(projection='3d')
+    ax.set_title("The franke function model and analytical solution.", fontsize=22)
 
     #surf = ax.plot_surface(x_array, y_array, z_tilde, cmap=cm.coolwarm, linewidth=0, antialiased=False)
 
