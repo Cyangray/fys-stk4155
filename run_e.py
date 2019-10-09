@@ -12,11 +12,7 @@ from sampling_methods import sampling
 
 """Running task e) of the project.
 Lasso regression.
-
-Need to do:
-A lot.
-
-A: runfile not done at all."""
+"""
 
 try:
     os.remove("backup_data.npz")

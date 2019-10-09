@@ -14,26 +14,18 @@ from sampling_methods import sampling
 Using k-fold cross validation for running data,
 and evaluating MSE and R^2 for this sampling method."""
 
-
-
-n = 300                 # no. of x and y coordinates
-deg = 5                 #degree of polynomial
-noise = 0.05            #if zero, no contribution. Otherwise scaling the noise.
+deg = 5                     # degree of the polynomial fit
 k = 5                       # k batches for k-fold.
 method = "least squares"    # "least squares", "ridge" or "lasso"
 
-# Create dataset 
+# Load previously generated dataset
 dataset = data_generate()
-
-# Generate Franke function (generate new dataset)...
-dataset.generate_franke(n, noise)
-
-# ...or Load old dataset for comparison
-#dataset.load_data()
+dataset.load_data()
 
 # Normalize the dataset and divide in samples
 dataset.normalize_dataset()
 dataset.sort_in_k_batches(k)
+
 
 # Run k-fold algorithm and fit models.
 sample = sampling(dataset)
@@ -45,7 +37,7 @@ statistics.print_mse(sample.mse)
 statistics.print_R2(sample.R2)
 
 # Plotting the best fit with the lowest mse.
-dataset.load_data()
+dataset.reload_data()
 fitted = fit(dataset)
 fitted.create_design_matrix(deg = deg)
 z_model_norm = fitted.test_design_matrix(sample.best_predicting_beta)

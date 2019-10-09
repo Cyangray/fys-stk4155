@@ -11,21 +11,15 @@ import statistical_functions as statistics
 from sampling_methods import sampling
 
 """Running task a) of the project.
-Generating dataset from Franke function with background noise
+Using generated dataset from run_generate_dataset.py, with
+a dataset from Franke function with background noise
 for standard least square regression w/polynomials up to the
 fifth order. Also adding MSE and R^2 score."""
 
-
-n = 150                 # no. of x and y coordinates
-deg = 5                 # degree of polynomial
-noise = 0.05            # if zero, no contribution. Otherwise scaling the noise.
-
-# Load dataset and generate Franke function
+# Load data from previously saved file
+deg = 5
 dataset = data_generate()
-dataset.generate_franke(n, noise)
-
-# Save the dataset for comparison with other methods
-dataset.save_data()
+dataset.load_data()
 
 # Normalize the dataset
 dataset.normalize_dataset()
@@ -34,7 +28,7 @@ dataset.normalize_dataset()
 fitted_model = fit(dataset)
 
 # Ordinary least square fitting
-fitted_model.X = fitted_model.create_design_matrix(deg)
+fitted_model.X = fitted_model.create_design_matrix(deg = deg)
 z_model_norm, beta = fitted_model.fit_design_matrix_numpy()
 
 # Statistical evaluation
@@ -52,4 +46,4 @@ analytical = data_generate()
 analytical.generate_franke(n, noise=0)
 
 # Plot solutions and analytical for comparison
-#plot_3d(dataset.x_unscaled, dataset.y_unscaled, z_model, analytical.x_mesh, analytical.y_mesh, analytical.z_mesh, ["surface", "scatter"])
+plot_3d(dataset.x_unscaled, dataset.y_unscaled, z_model, analytical.x_mesh, analytical.y_mesh, analytical.z_mesh, ["surface", "scatter"])

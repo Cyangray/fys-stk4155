@@ -59,8 +59,7 @@ class sampling():
             mse_train, calc_r2_train = statistics.calc_statistics(inst.z_1d, z_train)
             
             # Get the values for the bias and the variance
-            #bias, variance = statistics.calc_bias_variance(z_test, z_pred)
-            bias, variance = statistics.calc_bias_variance(whole_z, whole_z_pred)
+            bias, variance = statistics.calc_bias_variance(z_test, z_pred)
             
             self.mse.append(mse)
             self.R2.append(calc_r2)
