@@ -3,6 +3,8 @@ Working folder for a machine learning course at UiO together with @Cyangray
 
 This is a program written in python3 for OLS, ridge and LASSO modelling of generated and realistic datasets of 2D surfaces.
 
+The report itself is named ML.pdf
+
 Files for updated version:
 ------------------------------
 
