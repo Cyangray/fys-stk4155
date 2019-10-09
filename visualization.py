@@ -3,6 +3,7 @@ import matplotlib.pyplot as plt
 from matplotlib import cm
 from matplotlib.ticker import LinearLocator, FormatStrFormatter
 import numpy as np
+import sys
 
 
 def plot_3d(x, y, z, an_x, an_y, an_z, plot_type):
@@ -20,6 +21,7 @@ def plot_3d(x, y, z, an_x, an_y, an_z, plot_type):
     ax.zaxis.set_major_formatter(FormatStrFormatter('%.02f'))
     ax.set_xlabel("x")
     ax.set_ylabel("y")
+    #ax.set_title("The franke function model and analytical function", fontsize = 20)
 
     # Add a color bar which maps values to colors.
     fig.colorbar(surf, shrink=0.5, aspect=5)
@@ -80,5 +82,51 @@ def plot_bias_variance_vs_complexity(deg, bias, variance):
     ax2.legend()
     plt.show()
 
+def plot_beta(lambdas, beta):
+    """ Plots the betas in function of the hyperparameter lambda"""
+    fig, ax = plt.subplots()
+    ax.set_title("values of beta as function of lambda")
+    ax.set_xlabel("Lambda")
+    ax.set_ylabel("beta")
+    labels = ["beta_" + str(i) for i in range(len(beta[0,:]))]
     
-
+    for i in range(len(beta[0,:])):
+        ax.plot(lambdas, beta[:,i], 'r-', label = labels[i])
+    plt.xscale('log')
+    plt.grid('on')
+    plt.show()
+    
+def plot_bias_variance_vs_lambdas(lambdas, mse_test, mse_train):
+    """ Plots mse vs. values of lambda. """
+    fig, (ax1,ax2) = plt.subplots(nrows = 2, ncols = 1, sharex = True)
+    ax1.set_title("MSE for different lambdas")
+    ax1.set_xscale('log')
+    ax1.set_ylabel("Prediction error")
+    ax1.plot(lambdas, mse_test, 'r-', label = 'Bias')
+    ax1.grid('on')
+    ax1.legend()
+    
+    
+    ax2.set_xlabel("lambda")
+    ax2.set_ylabel("Prediction error")
+    ax2.plot(lambdas, mse_train, 'b-', label = 'Variance')
+    ax2.set_xscale('log')
+    ax2.grid('on')
+    ax2.legend()
+    plt.show()
+    
+    
+def plot_mse_vs_lambda(lambdas, mse_test, mse_train):
+    """ Plots mse vs. lambdas. """
+    fig, ax = plt.subplots()
+    ax.set_title("Bias-variance tradeoff for different lambdas")
+    ax.set_xlabel("lambda")
+    ax.set_ylabel("Prediction error")
+    ax.plot(lambdas, [mse_test[i] - mse_train[i] for i in range(len(mse_test))], 'r-', label = 'Test sample')
+    #ax.plot(lambdas, mse_train, 'b-', label = 'Training sample')
+    ax.set_xscale('log')
+    plt.grid('on')
+    plt.legend()
+    plt.show()
+    
+    

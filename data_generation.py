@@ -8,6 +8,7 @@ class data_generate():
     def __init__(self):
         self.resort = int(0)
         self.normalized = False
+        self.terrain = False
         
     def generate_franke(self, n, noise ):
         """ Generate franke-data with randomised noise in a n*n random grid. """
@@ -68,10 +69,13 @@ class data_generate():
     
     def load_terrain_data(self,terrain):
         """ Loads the terrain data for usage. """
+        self.terrain = True
+        
         self.N = np.size(terrain)
-        nrows = range(np.size(terrain,0))
-        ncolumns = range(np.size(terrain,1))
-        self.x_mesh, self.y_mesh = np.meshgrid(nrows,ncolumns)
+        nrows = np.size(terrain[:,0])
+        ncols = np.size(terrain[0,:])
+        self.shape = (nrows,ncols)
+        self.x_mesh, self.y_mesh = np.meshgrid(range(nrows),range(ncols))
         self.z_mesh = terrain
 
         self.x_1d = np.ravel(self.x_mesh)
@@ -157,15 +161,23 @@ class data_generate():
         
         
     def save_data(self):
-        """ Saves generated data for later use. """
-        np.savez("pregen_dataset", N=self.N, x=self.x_1d, y=self.y_1d, z=self.z_1d)
+
+        if self.terrain:
+            np.savez("pregen_dataset", N=self.N, x=self.x_1d, y=self.y_1d, z=self.z_1d, shape=self.shape, terrain=self.terrain)
+        else:
+            np.savez("pregen_dataset", N=self.N, x=self.x_1d, y=self.y_1d, z=self.z_1d, shape = 0, terrain = 0)
 
         
     def load_data(self):
         """ Loads "pregen_dataset.npz" for previously saved datasets. """
-        data = np.load("pregen_dataset.npz")
+        try:
+            data = np.load("pregen_dataset.npz")
+        except:
+            raise Exception("There is no pregen_dataset.npz to load in this folder!")
         self.N = data["N"]
         self.x_1d = data["x"]
         self.y_1d = data["y"]
         self.z_1d = data["z"]
+        self.shape = data["shape"]
+        self.terrain = data["terrain"]
 
