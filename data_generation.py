@@ -2,7 +2,6 @@ import numpy as np
 from sklearn import preprocessing
 import sys
 
-
 from functions import franke_function
 
 class data_generate():
@@ -12,7 +11,7 @@ class data_generate():
         self.terrain = False
         
     def generate_franke(self, n, noise ):
-        """ Generate franke-data """
+        """ Generate franke-data with randomised noise in a n*n random grid. """
         self.n = n
         self.noise = noise
         self.N = n*n #Number of datapoints (in a square meshgrid)
@@ -44,6 +43,7 @@ class data_generate():
 
     
     def normalize_dataset(self):
+        """ Uses the scikit-learn preprocessing for scaling the data sets for computational stability. """
         self.normalized = True
         self.x_unscaled = self.x_1d.copy()
         self.y_unscaled = self.y_1d.copy()
@@ -55,6 +55,7 @@ class data_generate():
         #self.x_1d, self.y_1d, self.z_1d = scaled_matrix[:,0].T, scaled_matrix[:,1].T, scaled_matrix[:,2].T
             
     def rescale_back(self, x=0, y=0, z=0):
+        """ After processing, the data must be scaled back to normal by scalers inverse_transform for mainly plotting purposes."""
         self.normalized = False
         if isinstance(x, int):
             x = self.x_1d
@@ -67,7 +68,9 @@ class data_generate():
         return rescaled_matrix.T
     
     def load_terrain_data(self,terrain):
+        """ Loads the terrain data for usage. """
         self.terrain = True
+        
         self.N = np.size(terrain)
         nrows = np.size(terrain[:,0])
         ncols = np.size(terrain[0,:])
@@ -123,45 +126,11 @@ class data_generate():
             if idx != i:
                 self.training_indices += self.k_idxs[idx]
 
-    def sort_training_test_random(self, fractions_trainingdata):
-        """ RANDOM! Does not give you the fraction, but the fraction 
-        is the probability of being training data. Generates lists for 
-        sorting training data and test data."""
-
-        # Since training data are renamed other places, make a copy for it to be able to resort later. 
-        #self.reload_data()
-            
-        i = 0
-        n = self.n
-        self.training_indices = [] ; self.test_indices = []
-
-        while i < self.no_datasets:    
-            if np.random.rand() > fractions_trainingdata:
-                self.training_indices.append(i)
-            else:
-                self.test_indices.append(i)
-            i += 1
-
-
-    def sort_training_test_statistical(self, fractions_trainingdata):
-        """ STATISTICAL! Does give you the fraction as close as possible.
-        Generates lists for sorting training data and test data."""
-
-        # Since training data are renamed other places, make a copy for it to be able to resort later. 
-        #self.reload_data()
-
-        no_training_set = int(self.no_datasets*fractions_trainingdata)
-        no_test_set = self.no_datasets - no_training_set
-
-        # Lists int values, shuffles randomly and splits into two pieces.
-        split = np.arange(self.N)
-        np.random.shuffle(split)
-
-        self.training_indices = list(split[:no_training_set])
-        self.test_indices = list(split[no_training_set:])
-
 
     def fill_array_test_training(self):
+        """ Fill the arrays, eg. test_x_1d and x_1d for x, y and z with
+        the actual training data according to how the indicies was sorted in 
+        sort_training_test_kfold."""
         testing = self.test_indices ; training = self.training_indices
 
         self.reload_data()
@@ -179,6 +148,7 @@ class data_generate():
         self.N_testing = len(testing)
 
     def reload_data(self):
+        """ Neat system for automatically make a backup of data sets if you resort. """
         if self.resort < 1:
             np.savez("backup_data", N=self.N, x=self.x_1d, y=self.y_1d, z=self.z_1d)
         else: # self.resort >= 1:
@@ -191,6 +161,7 @@ class data_generate():
         
         
     def save_data(self):
+
         if self.terrain:
             np.savez("pregen_dataset", N=self.N, x=self.x_1d, y=self.y_1d, z=self.z_1d, shape=self.shape, terrain=self.terrain)
         else:
@@ -198,6 +169,7 @@ class data_generate():
 
         
     def load_data(self):
+        """ Loads "pregen_dataset.npz" for previously saved datasets. """
         try:
             data = np.load("pregen_dataset.npz")
         except:
@@ -208,8 +180,4 @@ class data_generate():
         self.z_1d = data["z"]
         self.shape = data["shape"]
         self.terrain = data["terrain"]
-
-
-
-
 

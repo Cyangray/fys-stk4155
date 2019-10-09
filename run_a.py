@@ -28,7 +28,7 @@ dataset.normalize_dataset()
 fitted_model = fit(dataset)
 
 # Ordinary least square fitting
-fitted_model.X = fitted_model.create_design_matrix(deg = deg)
+fitted_model.create_design_matrix(deg)
 z_model_norm, beta = fitted_model.fit_design_matrix_numpy()
 
 # Statistical evaluation
