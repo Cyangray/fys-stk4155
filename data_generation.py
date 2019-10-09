@@ -51,8 +51,6 @@ class data_generate():
         dataset_matrix = np.stack((self.x_1d, self.y_1d, self.z_1d)).T
         self.scaler = preprocessing.StandardScaler().fit(dataset_matrix)
         [self.x_1d, self.y_1d, self.z_1d] = self.scaler.transform(dataset_matrix).T
-        #scaled_matrix = self.scaler.transform(dataset_matrix)
-        #self.x_1d, self.y_1d, self.z_1d = scaled_matrix[:,0].T, scaled_matrix[:,1].T, scaled_matrix[:,2].T
             
     def rescale_back(self, x=0, y=0, z=0):
         """ After processing, the data must be scaled back to normal by scalers inverse_transform for mainly plotting purposes."""

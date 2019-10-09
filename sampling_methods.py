@@ -67,7 +67,7 @@ class sampling():
             self.R2_train.append(calc_r2_train)
             self.bias.append(bias)
             self.variance.append(variance)
-            # If needed/wanted?: 
+            # If needed/wanted: 
             if abs(mse) < lowest_mse:
                 lowest_mse = abs(mse)
                 self.best_predicting_beta = beta_train

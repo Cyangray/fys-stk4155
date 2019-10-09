@@ -10,7 +10,7 @@ from visualization import plot_3d, plot_beta, plot_bias_variance_vs_lambdas, plo
 import statistical_functions as statistics
 from sampling_methods import sampling
 
-"""Running task d) of the project.
+"""Running task d) and e) of the project.
 Ridge regression and dependence on lambda.
 """
 

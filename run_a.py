@@ -21,6 +21,10 @@ deg = 5
 dataset = data_generate()
 dataset.load_data()
 
+# Or you can generate directly.
+#dataset = data_generate()
+#dataset.generate_franke(n=100, noise=0.2)
+
 # Normalize the dataset
 dataset.normalize_dataset()
 

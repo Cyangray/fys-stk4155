@@ -9,7 +9,7 @@ from visualization import plot_3d, plot_bias_var_tradeoff, plot_mse_vs_complexit
 import statistical_functions as statistics
 from sampling_methods import sampling
 
-"""Running task c) of the project.
+"""Running task c) of the project, as well as some parts of c).
 Running additional variance-bias tradeoff calculations
 for different degrees of polynomials of OLS. """
 

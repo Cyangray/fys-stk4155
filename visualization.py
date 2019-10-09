@@ -128,5 +128,51 @@ def plot_mse_vs_lambda(lambdas, mse_test, mse_train):
     plt.grid('on')
     plt.legend()
     plt.show()
-    
-    
+
+
+def plot_terrains(ind_var, ind_var_text, method, CV_text, x_matrices, x_labels, mses, R2s, lambdas, biases, variances):
+    """ Function for plotting various useful plots from the real terrain data. """
+    # Plot terrains
+    fig, axs = plt.subplots(nrows = 1, ncols = len(ind_var), sharey = True)
+    xlabels = [ind_var_text + " = " + str(i) for i in ind_var]
+    axs[2].set_title("Model of map for " + method + ", " + CV_text + " cross validation")
+    for i, ax in enumerate(axs):
+        ax.imshow(z_matrices[i], cmap = cm.coolwarm)
+        ax.set_xlabel(xlabels[i])
+    plt.show()
+
+    # Plot errors
+    fig, (ax1,ax2) = plt.subplots(nrows = 2, ncols = 1, sharex = True)
+    ax1.set_title("MSE and R2 score of map for " + method + ", " + CV_text + " cross validation")
+    ax1.plot(ind_var,mses,'r-',label = "MSE")
+    if ind_var == lambdas:
+        ax1.set_xscale('log')
+    ax1.grid('on')
+    ax1.legend()
+
+    ax2.set_xlabel(ind_var_text)
+    ax2.plot(ind_var,R2s,'b-',label = "R2 score")
+    if ind_var == lambdas:
+        ax2.set_xscale('log')
+    ax2.grid('on')
+    ax2.legend()
+    plt.show()
+
+    #Plot bias and variance
+    fig, (ax1,ax2) = plt.subplots(nrows = 2, ncols = 1, sharex = True)
+    ax1.set_title("Bias and variance of map for " + method + ", " + CV_text + " cross validation")
+    ax1.plot(ind_var,biases,'r-',label = "Bias")
+    if ind_var == lambdas:
+        ax1.set_xscale('log')
+    ax1.grid('on')
+    ax1.legend()
+
+    ax2.set_xlabel(ind_var_text)
+    ax2.plot(ind_var,variances,'b-',label = "Variance")
+    if ind_var == lambdas:
+        ax2.set_xscale('log')
+    ax2.grid('on')
+    ax2.legend()
+    plt.show()
+        
+        
